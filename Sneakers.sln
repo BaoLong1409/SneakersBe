@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sneakers", "Sneakers\Sneakers.csproj", "{2712DA09-EDDC-412E-B126-864A94A9B93E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{40658FD3-7669-44EE-A991-5B71C9DFD580}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{5E3720AF-7B2E-4AD1-8B2D-2D731B581911}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2712DA09-EDDC-412E-B126-864A94A9B93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2712DA09-EDDC-412E-B126-864A94A9B93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2712DA09-EDDC-412E-B126-864A94A9B93E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2712DA09-EDDC-412E-B126-864A94A9B93E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40658FD3-7669-44EE-A991-5B71C9DFD580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40658FD3-7669-44EE-A991-5B71C9DFD580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40658FD3-7669-44EE-A991-5B71C9DFD580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40658FD3-7669-44EE-A991-5B71C9DFD580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E3720AF-7B2E-4AD1-8B2D-2D731B581911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E3720AF-7B2E-4AD1-8B2D-2D731B581911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E3720AF-7B2E-4AD1-8B2D-2D731B581911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E3720AF-7B2E-4AD1-8B2D-2D731B581911}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9BFC3FF6-6EAA-47A7-8F6D-3D82F8FC7ACC}
+	EndGlobalSection
+EndGlobal

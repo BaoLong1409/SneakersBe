@@ -1,0 +1,55 @@
+[
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "ConfirmEmail",
+    "RelativePath": "api/v1/user/confirmationEmail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "Login",
+    "RelativePath": "api/v1/user/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginModel",
+        "Type": "Domain.ViewModel.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "RegisterUser",
+    "RelativePath": "api/v1/user/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userModel",
+        "Type": "Domain.ViewModel.UserRegistration",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
