@@ -12,3 +12,4 @@ C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Domain\obj\Debug\net8.0\
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Domain\obj\Debug\net8.0\Domain.pdb
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Domain\obj\Debug\net8.0\Domain.genruntimeconfig.cache
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Domain\obj\Debug\net8.0\ref\Domain.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Domain\obj\Debug\net8.0\Domain.sourcelink.json

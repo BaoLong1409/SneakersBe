@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class ProdutTranslation
+    public class ProductSize
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public required Guid Id { get; set; }
         [Required]
-        public Guid ProductId { get; set; }
+        public required Guid SizeId { get; set; }
+        public Size? Size { get; set; }
         [Required]
-        public required string Description { get; set; }
-        [Required]
-        public required string LanguageCode { get; set; }
+        public required Guid ProductId { get; set; }
         public Product? Product { get; set; }
-
+        [Required]
+        public required int StockQuantity { get; set; }
     }
 }

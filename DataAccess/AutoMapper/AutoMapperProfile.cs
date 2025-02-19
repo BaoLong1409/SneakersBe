@@ -10,6 +10,7 @@ namespace DataAccess.AutoMapper
         public AutoMapperProfile()
         {
             CreateMap<IdentityRole<Guid>, Role>();
+            CreateMap<User, UserDto>();
         }
     }
 }

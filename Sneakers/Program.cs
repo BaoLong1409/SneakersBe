@@ -11,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<SneakersDapperContext>();
+
 builder.Services.ConfigureTransient();
 builder.Services.ConfigureServices(builder.Configuration);
 

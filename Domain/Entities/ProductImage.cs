@@ -17,5 +17,8 @@ namespace Domain.Entities
         public required string ImageUrl { get; set; }
         [Required]
         public int IsThumbnail { get; set; }
+        [Required]
+        public Guid ProductId { get; set; }
+        public Product? Product { get; set; }
     }
 }

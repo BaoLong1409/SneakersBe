@@ -15,5 +15,11 @@ namespace Domain.Entities
         public Guid Id { get; set; }
         [Required]
         public int Quality {  get; set; }
+        [Required]
+        public required Guid OrderDetailId { get; set; }
+        public OrderDetail? OrderDetail { get; set; }
+        [Required]
+        public required Guid UserId { get; set; }
+        public User? User { get; set; }
     }
 }

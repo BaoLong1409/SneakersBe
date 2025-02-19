@@ -8,6 +8,8 @@ namespace Domain.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
+        IUserRepository User {  get; }
+        IProductRepository Product { get; }
         int Complete();
     }
 }

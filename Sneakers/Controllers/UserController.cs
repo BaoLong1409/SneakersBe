@@ -149,19 +149,57 @@ namespace Sneakers.Controllers
         [Route("user/confirmationEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
+            if (String.IsNullOrEmpty(token) || String.IsNullOrEmpty(email))
+            {
+                return Redirect("http://localhost:4200/EmailConfirmed/invalid");
+            }
 
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                return BadRequest();
+                return Redirect("http://localhost:4200/EmailConfirmed/notFound");
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                return Ok();
+                return Redirect("http://localhost:4200/EmailConfirmed/success");
             }
-            return BadRequest();
+            return Redirect("http://localhost:4200/EmailConfirmed/fail");
+        }
+
+        [HttpGet]
+        [Route("user/getInfor")]
+        public async Task<IActionResult> GetInforUserByToken(string token)
+        {
+            var user = _unitOfWork.User.GetUserByToken(token);
+            var userInfor = _mapper.Map<UserDto>(user);
+            return Ok(userInfor);
+        }
+
+
+        [HttpPut]
+        [Route("user/changeTheme")]
+        public async Task<IActionResult> ChangeTheme(Guid id, string theme)
+        {
+            var user = await FindUserById(id);
+            if (user == null) {
+                return BadRequest(new {message = "User does not exist"});
+            }
+
+            user.Theme = theme;
+            _unitOfWork.Complete();
+            return Ok();
+        }
+
+        private async Task<UserDto?> FindUserById (Guid id)
+        {
+            var user = await _unitOfWork.User.GetByIdAsync(id);
+            var userDto = _mapper.Map<UserDto>(user);
+            if (userDto == null) {
+                return null;
+            }
+            return userDto;
         }
 
 

@@ -19,7 +19,7 @@ namespace Domain.Entities
         public required Guid UserId { get; set; }
         public User? User { get; set; }
         [Required]
-        public required Guid ProductId { get; set; }
-        public Product? Product { get; set; }
+        public required Guid OrderDetailId { get; set; }
+        public OrderDetail? OrderDetail { get; set; }
     }
 }

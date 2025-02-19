@@ -1,4 +1,5 @@
 ﻿using DataAccess.DbContext;
+using DataAccess.Repositories;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,13 @@ namespace DataAccess.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly SneakersDbContext _context;
+        public IUserRepository User{  get; private set; }
+        public IProductRepository Product { get; private set; }
         public UnitOfWork(SneakersDbContext context)
         {
             _context = context;
+            User = new UserRepository(_context);
+            Product = new ProductRepository(_context);
         }
 
         public int Complete()

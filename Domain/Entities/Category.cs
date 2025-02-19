@@ -15,5 +15,7 @@ namespace Domain.Entities
         public Guid Id { get; set; }
         [Required]
         public required String Name { get; set; }
+        [Required]
+        public required String Brand { get; set; }
     }
 }

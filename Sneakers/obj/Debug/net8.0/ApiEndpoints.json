@@ -1,5 +1,62 @@
 [
   {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "GetAllProducts",
+    "RelativePath": "api/v1/product/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "GetFeatureProducts",
+    "RelativePath": "api/v1/product/getAllFeatureProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "GetRecommendProducts",
+    "RelativePath": "api/v1/product/getRecommendProduct",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "ChangeTheme",
+    "RelativePath": "api/v1/user/changeTheme",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "theme",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Sneakers.Controllers.UserController",
     "Method": "ConfirmEmail",
     "RelativePath": "api/v1/user/confirmationEmail",
@@ -14,6 +71,22 @@
       },
       {
         "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "GetInforUserByToken",
+    "RelativePath": "api/v1/user/getInfor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
         "Type": "System.String",
         "IsRequired": false
       }

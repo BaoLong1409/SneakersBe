@@ -11,6 +11,12 @@ using DataAccess.DbContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Sneakers.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Sneakers.Features.Queries.FeatureProducts;
+using MediatR;
+using Sneakers.Handler.QueriesHandler.FeatureProductsHandler;
+using Domain.ViewModel;
+using Sneakers.Features.Queries.Products;
+using Sneakers.Handler.QueriesHandler.ProductsHandler;
 
 
 namespace Sneakers.AddServicesCollection
@@ -20,12 +26,18 @@ namespace Sneakers.AddServicesCollection
         public static void ConfigureTransient(this IServiceCollection services)
         {
             services.AddTransient(typeof (IGenericRepository<>), typeof (GenericRepository<>));
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddTransient<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
+            services.AddTransient<IRequestHandler<GetAllProducts, IEnumerable<ShowProductsDto>>, GetAllProductsHandler>();
+            services.AddTransient<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
         }
 
         public static void ConfigureServices(this IServiceCollection service, IConfiguration config)
         {
+            service.AddHttpClient();
             service.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             service.AddSignalR();
             service.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

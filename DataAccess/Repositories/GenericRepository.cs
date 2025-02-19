@@ -17,9 +17,9 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public T? GetById(Guid id)
+        public async Task<T?> GetByIdAsync(Guid id)
         {
-            var entity = _context.Set<T>().Find(id);
+            var entity = await _context.Set<T>().FindAsync(id);
             if (entity == null)
             {
                 return null;

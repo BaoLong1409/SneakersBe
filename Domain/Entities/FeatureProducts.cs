@@ -8,19 +8,21 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class ProductPrice
+    public class FeatureProducts
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Required]
-        public Guid ProductId { get; set; }
+        public required string ImageUrl { get; set; }
         [Required]
-        public required Decimal Price { get; set; }
+        public required string LeftColor { get; set; }
         [Required]
-        public required int Sale { get; set; }
+        public required string MiddleColor { get; set; }
         [Required]
-        public required string CurrencyCode { get; set; }
+        public required string RightColor { get; set; }
+        [Required]
+        public required Guid ProductId { get; set; }
         public Product? Product { get; set; }
     }
 }
