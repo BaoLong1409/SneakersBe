@@ -10,6 +10,9 @@ namespace Domain.Interfaces
     {
         IUserRepository User {  get; }
         IProductRepository Product { get; }
+        IProductCartRepository ProductCart { get; }
+        IProductQuantityRepository ProductQuantity { get; }
+        ICartRepository Cart { get; }
         int Complete();
     }
 }

@@ -44,5 +44,12 @@ namespace Sneakers.Controllers
         {
             return Ok(await _mediator.Send(new GetRecommendProducts(userId)));
         }
+
+        [HttpGet]
+        [Route("product/getProductById")]
+        public async Task<IActionResult> GetProductById (Guid productId)
+        {
+            return Ok(await _mediator.Send(new GetProductById(productId)));
+        }
     }
 }

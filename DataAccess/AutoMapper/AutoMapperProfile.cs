@@ -11,6 +11,8 @@ namespace DataAccess.AutoMapper
         {
             CreateMap<IdentityRole<Guid>, Role>();
             CreateMap<User, UserDto>();
+            CreateMap<ManageProductInCartDto, ProductCart>();
+
         }
     }
 }

@@ -17,6 +17,7 @@ using Sneakers.Handler.QueriesHandler.FeatureProductsHandler;
 using Domain.ViewModel;
 using Sneakers.Features.Queries.Products;
 using Sneakers.Handler.QueriesHandler.ProductsHandler;
+using Sneakers.Services.CartService;
 
 
 namespace Sneakers.AddServicesCollection
@@ -26,13 +27,18 @@ namespace Sneakers.AddServicesCollection
         public static void ConfigureTransient(this IServiceCollection services)
         {
             services.AddTransient(typeof (IGenericRepository<>), typeof (GenericRepository<>));
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProductCartRepository, ProductCartRepository>();
+            services.AddScoped<IProductQuantityRepository, ProductQuantityRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<CartService>();
 
             services.AddTransient<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
             services.AddTransient<IRequestHandler<GetAllProducts, IEnumerable<ShowProductsDto>>, GetAllProductsHandler>();
             services.AddTransient<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
+            services.AddTransient<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
         }
 
         public static void ConfigureServices(this IServiceCollection service, IConfiguration config)

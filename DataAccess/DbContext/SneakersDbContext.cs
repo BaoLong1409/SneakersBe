@@ -30,8 +30,7 @@ namespace DataAccess.DbContext
         public DbSet<ProductCart> ProductCart { get; set; }
         public DbSet<ProductCategory> ProductCategory { get; set; }
         public DbSet<ProductImage> ProductImage { get; set; }
-        public DbSet<ProductColor> ProductColor { get; set; }
-        public DbSet<ProductSize> ProductSize { get; set; }
+        public DbSet<ProductQuantity> ProductQuantity { get; set; }
         public DbSet<Rating> Rating { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Shipping> Shipping { get; set; }
@@ -83,6 +82,18 @@ namespace DataAccess.DbContext
             {
                 entity.ToTable(name: "Role");
             });
+
+            builder.Entity<Payment>().HasData(
+                new Payment { Name = "COD" },
+                new Payment { Name = "E-Wallets" }
+            );
+
+            builder.Entity<Shipping>().HasData(
+                new Shipping { Name = "Standard", Price = 0.61m },
+                new Shipping { Name = "Express", Price = 0.90m },
+                new Shipping { Name = "Ultra-Fast Delivery", Price = 1.63m }
+            );
+
 
             base.OnModelCreating(builder);
         }

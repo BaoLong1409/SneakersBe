@@ -14,11 +14,19 @@ namespace DataAccess.UnitOfWork
         private readonly SneakersDbContext _context;
         public IUserRepository User{  get; private set; }
         public IProductRepository Product { get; private set; }
+        public IProductCartRepository ProductCart { get; private set; }
+        public ICartRepository Cart { get; private set; }
+        public IProductQuantityRepository ProductQuantity { get; private set; }
+
+
         public UnitOfWork(SneakersDbContext context)
         {
             _context = context;
             User = new UserRepository(_context);
             Product = new ProductRepository(_context);
+            ProductCart = new ProductCartRepository(_context);
+            Cart = new CartRepository(_context);
+            ProductQuantity = new ProductQuantityRepository(_context);
         }
 
         public int Complete()

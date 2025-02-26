@@ -1,5 +1,6 @@
 ﻿using DataAccess.DbContext;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,11 @@ namespace DataAccess.Repositories
             return _context.Set<T>().Where(expression).ToList();
         }
 
+        public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(expression);
+        }
+
         public void Add(T entity)
         {
             _context.Set<T>().Add(entity);
@@ -45,6 +51,10 @@ namespace DataAccess.Repositories
         public void AddRange(IEnumerable<T> entities)
         {
             _context.Set<T>().AddRange(entities);
+        }
+
+        public void Update(T entity) { 
+            _context.Set<T>().Update(entity);
         }
 
         public void Remove(T entity)

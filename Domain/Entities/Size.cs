@@ -14,6 +14,6 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public required Guid Id {  get; set; }
         [Required]
-        public int SizeNumber { get; set; }
+        public float SizeNumber { get; set; }
     }
 }
