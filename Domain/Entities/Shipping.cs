@@ -17,5 +17,9 @@ namespace Domain.Entities
         public required string Name { get; set; }
         [Required]
         public Decimal Price { get; set; }
+        [Required]
+        public required int MinimumDeliverdTime { get; set; }
+        [Required]
+        public required int MaximumDeliverdTime { get; set; }
     }
 }

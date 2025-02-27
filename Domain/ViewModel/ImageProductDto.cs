@@ -11,5 +11,6 @@ namespace Domain.ViewModel
         public Guid ImageId { get; set; }
         public String ImageUrl { get; set; }
         public int IsThumbnail { get; set; }
+        public Guid ProductId { get; set; }
     }
 }

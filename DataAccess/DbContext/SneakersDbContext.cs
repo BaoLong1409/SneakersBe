@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using DataAccess.SeedData;
 
 namespace DataAccess.DbContext
 {
@@ -84,14 +85,14 @@ namespace DataAccess.DbContext
             });
 
             builder.Entity<Payment>().HasData(
-                new Payment { Name = "COD" },
-                new Payment { Name = "E-Wallets" }
+                new Payment { Id = SeedData.SeedData.CODPaymentId, Name = "COD" },
+                new Payment { Id = SeedData.SeedData.EWalletsPaymentId, Name = "E-Wallets" }
             );
 
             builder.Entity<Shipping>().HasData(
-                new Shipping { Name = "Standard", Price = 0.61m },
-                new Shipping { Name = "Express", Price = 0.90m },
-                new Shipping { Name = "Ultra-Fast Delivery", Price = 1.63m }
+                new Shipping { Id = SeedData.SeedData.StandardShippingId, Name = "Standard", Price = 0.61m, MinimumDeliverdTime = 5, MaximumDeliverdTime = 7 },
+                new Shipping { Id = SeedData.SeedData.ExpressShippingId, Name = "Express", Price = 0.90m, MinimumDeliverdTime = 3, MaximumDeliverdTime = 5 },
+                new Shipping { Id = SeedData.SeedData.UltraFastShippingId, Name = "Ultra-Fast Delivery", Price = 1.63m, MinimumDeliverdTime = -12, MaximumDeliverdTime = -24 }
             );
 
 

@@ -1,6 +1,8 @@
 ﻿using DataAccess.DbContext;
+using Domain.Entities;
 using Domain.Interfaces;
 using Domain.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,23 @@ namespace DataAccess.Repositories
     {
         public ProductRepository(SneakersDbContext context) : base(context)
         {
+            
+        }
+
+        public async Task<IEnumerable<ImageProductDto>> GetImageProductColors(Guid productId, IEnumerable<Color> colors)
+        {
+            var colorIds = colors.Select(c => c.Id).ToList();
+
+            return await _context.ProductImage
+                .Where(pi => pi.ProductId == productId && colorIds.Contains(pi.ColorId) && pi.IsThumbnail == 1)
+                .Select(pi => new ImageProductDto
+                {
+                    ImageId = pi.Id,
+                    ImageUrl = pi.ImageUrl,
+                    ProductId = pi.ProductId,
+                    IsThumbnail = pi.IsThumbnail
+                })
+                .ToListAsync();
             
         }
     }

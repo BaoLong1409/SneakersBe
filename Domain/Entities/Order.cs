@@ -17,8 +17,7 @@ namespace Domain.Entities
         public required string Status { get; set; }
         [Required]
         public required DateTime OrderDate { get; set; }
-        [Required]
-        public required DateTime ShippingDate { get; set; }
+        public DateTime ShippingDate { get; set; }
         [Required]
         public required Decimal TotalMoney { get; set; }
         [Required]

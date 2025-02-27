@@ -1,4 +1,5 @@
-﻿using Domain.ViewModel;
+﻿using Domain.Entities;
+using Domain.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Domain.Interfaces
 {
     public interface IProductRepository : IGenericRepository<ShowProductsDto>
     {
+        public Task<IEnumerable<ImageProductDto>> GetImageProductColors(Guid productId, IEnumerable<Color> colors);
     }
 }

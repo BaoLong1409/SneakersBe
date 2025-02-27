@@ -17,6 +17,9 @@ namespace DataAccess.UnitOfWork
         public IProductCartRepository ProductCart { get; private set; }
         public ICartRepository Cart { get; private set; }
         public IProductQuantityRepository ProductQuantity { get; private set; }
+        public ISizeRepository Size { get; private set; }
+        public IColorRepository Color { get; private set; }
+
 
 
         public UnitOfWork(SneakersDbContext context)
@@ -27,6 +30,8 @@ namespace DataAccess.UnitOfWork
             ProductCart = new ProductCartRepository(_context);
             Cart = new CartRepository(_context);
             ProductQuantity = new ProductQuantityRepository(_context);
+            Size = new SizeRepository(_context);
+            Color = new ColorRepository(_context);
         }
 
         public int Complete()

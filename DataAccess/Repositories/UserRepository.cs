@@ -15,7 +15,6 @@ namespace DataAccess.Repositories
     {
         public UserRepository(SneakersDbContext context) : base(context)
         {
-            
         }
 
         public User GetUserByToken(string token)

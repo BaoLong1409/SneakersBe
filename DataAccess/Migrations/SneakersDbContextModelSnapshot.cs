@@ -253,6 +253,18 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Payment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b3c1f7a4-92d5-4b19-a7e5-6d8b2a9f3d44"),
+                            Name = "COD"
+                        },
+                        new
+                        {
+                            Id = new Guid("f47e3b92-5c1d-4e06-9ea2-8b1d77f8c123"),
+                            Name = "E-Wallets"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
@@ -347,6 +359,9 @@ namespace DataAccess.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NewID()");
 
+                    b.Property<Guid>("ColorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -358,6 +373,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
 
                     b.HasIndex("ProductId");
 
@@ -485,6 +502,12 @@ namespace DataAccess.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NewID()");
 
+                    b.Property<int>("MaximumDeliverdTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinimumDeliverdTime")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -495,6 +518,32 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Shipping");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7e2f4c38-8a5b-402a-b8d1-5e9fbc3d7a92"),
+                            MaximumDeliverdTime = 7,
+                            MinimumDeliverdTime = 5,
+                            Name = "Standard",
+                            Price = 0.61m
+                        },
+                        new
+                        {
+                            Id = new Guid("d8a9c347-6e5a-4b11-bf9d-2f4e9c1a7d55"),
+                            MaximumDeliverdTime = 5,
+                            MinimumDeliverdTime = 3,
+                            Name = "Express",
+                            Price = 0.90m
+                        },
+                        new
+                        {
+                            Id = new Guid("c3b82e7d-1f92-4a50-a6b3-7d9e4f5c2a88"),
+                            MaximumDeliverdTime = -24,
+                            MinimumDeliverdTime = -12,
+                            Name = "Ultra-Fast Delivery",
+                            Price = 1.63m
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.ShippingInfor", b =>
@@ -905,11 +954,19 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Entities.ProductImage", b =>
                 {
+                    b.HasOne("Domain.Entities.Color", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany("ProductImages")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Color");
 
                     b.Navigation("Product");
                 });
