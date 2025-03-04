@@ -57,12 +57,26 @@ namespace Sneakers.Controllers
         }
 
         [HttpGet]
-        [Route("product/getImageProductColors")]
-        public async Task<IActionResult> GetImageProductColors(Guid productId)
+        [Route("product/getImageColorsProduct")]
+        public async Task<IActionResult> GetImageColorsProduct(Guid productId)
         {
             var colors = await _colorService.GetAllProductColors(productId);
             var productThumbnailColors = await _productService.GetImageProductColor(productId, colors);
             return Ok(productThumbnailColors);
+        }
+
+        [HttpGet]
+        [Route("product/getAvailableSizes")]
+        public async Task<IActionResult> GetAvaiableSizes(Guid productId, String colorName)
+        {
+            var color = await _colorService.GetColorFromColorName(colorName);
+
+            if (color == null) {
+                return NotFound("Color Not Found");
+            }
+            
+            var availableProducts = await _productService.GetAvailableProducts(productId, color.Id);
+            return Ok(availableProducts);
         }
     }
 }

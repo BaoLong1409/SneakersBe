@@ -22,17 +22,22 @@ namespace DataAccess.Repositories
         {
             var colorIds = colors.Select(c => c.Id).ToList();
 
-            return await _context.ProductImage
+            var images = await _context.ProductImage
                 .Where(pi => pi.ProductId == productId && colorIds.Contains(pi.ColorId) && pi.IsThumbnail == 1)
                 .Select(pi => new ImageProductDto
                 {
                     ImageId = pi.Id,
                     ImageUrl = pi.ImageUrl,
                     ProductId = pi.ProductId,
-                    IsThumbnail = pi.IsThumbnail
+                    IsThumbnail = pi.IsThumbnail,
+                    ColorId = pi.ColorId
                 })
                 .ToListAsync();
-            
+            foreach (var image in images) {
+                image.ColorName = colors.FirstOrDefault(c => c.Id == image.ColorId).Name;
+            }
+
+            return images;
         }
     }
 }

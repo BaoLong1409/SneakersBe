@@ -45,7 +45,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<ProductService>();
 
             services.AddTransient<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
-            services.AddTransient<IRequestHandler<GetAllProducts, IEnumerable<ShowProductsDto>>, GetAllProductsHandler>();
+            services.AddTransient<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();
             services.AddTransient<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
             services.AddTransient<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
         }

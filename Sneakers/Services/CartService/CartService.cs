@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Sneakers.Services.CartService
 {
@@ -16,7 +17,58 @@ namespace Sneakers.Services.CartService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductInCartDto>> GetProductInCartsAsync(Guid userId)
+        public async Task<EnumProductCart> AddProductToCart( ManageProductInCartDto product, Guid userId)
+        {
+            var cart = await _unitOfWork.Cart.GetFirstOrDefaultAsync(c => c.UserId == userId);
+            if (cart == null)
+            {
+                return EnumProductCart.CartNotFound;
+            }
+
+            var productStockQuantity = await _unitOfWork.ProductQuantity
+                .GetFirstOrDefaultAsync(c =>
+                c.ProductId == product.ProductId &&
+                c.SizeId == product.SizeId &&
+                c.ColorId == product.ColorId
+                );
+            if (productStockQuantity == null)
+            {
+                return EnumProductCart.ProductNotFound;
+            }
+
+            if (productStockQuantity.StockQuantity < product.Quantity)
+            {
+                return EnumProductCart.NotEnoughInStock;
+            }
+
+            var productInCart = await GetProductInCartAsync(cart.Id, product);
+            var productToAddCart = _mapper.Map<ProductCart>(product);
+            productToAddCart.CartId = cart.Id;
+
+            if (productInCart == null) {
+                _unitOfWork.ProductCart.Add(productToAddCart);
+                _unitOfWork.Complete();
+                return EnumProductCart.Success;
+            }
+            if ((productInCart.Quantity + product.Quantity) > productStockQuantity.StockQuantity)
+            {
+                return EnumProductCart.NotEnoughInStock;
+            }
+            productInCart.Quantity += product.Quantity;
+            _unitOfWork.Complete();
+            return EnumProductCart.Success;
+        }
+
+        private async Task<ProductCart> GetProductInCartAsync(Guid cartId, ManageProductInCartDto product)
+        {
+            var productInCart = await _unitOfWork.ProductCart.GetFirstOrDefaultAsync(x => x.CartId == cartId && x.ProductId == product.ProductId && x.SizeId == product.SizeId && x.ColorId == product.ColorId);
+
+            if (productInCart == null) return null;
+
+            return productInCart;
+        }
+
+        public async Task<IEnumerable<ProductInCartDto>> GetProductsInCartAsync(Guid userId)
         {
             var cart = await _unitOfWork.Cart.GetFirstOrDefaultAsync(x => x.UserId == userId);
 

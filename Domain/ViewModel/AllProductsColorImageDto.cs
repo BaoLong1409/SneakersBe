@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.ViewModel
 {
-    public class ManageProductInCartDto
+    public class AllProductsColorImageDto
     {
-        public Guid ProductId { get; set; }
-        public Guid? CartId { get; set; }
-        public Guid SizeId { get; set; }
         public Guid ColorId { get; set; }
-        public int Quantity { get; set; }
+        public Guid ImageId { get; set; }
+        public required String ColorName { get; set; }
+        public required String ThumbnailUrl { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Sneakers.Features.Queries.FeatureProducts
 {
-    public class GetAllProducts : IRequest<IEnumerable<ShowProductsDto>>
+    public class GetAllProducts : IRequest<IEnumerable<AllProductsDto>>
     {
     }
 }

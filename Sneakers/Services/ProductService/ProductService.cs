@@ -16,9 +16,14 @@ namespace Sneakers.Services.ProductService
             _unitOfWork = unitOfWork;
         }
 
-        public Task<IEnumerable<ImageProductDto>> GetImageProductColor(Guid productId, IEnumerable<Color> colors)
+        public async Task<IEnumerable<ImageProductDto>> GetImageProductColor(Guid productId, IEnumerable<Color> colors)
         {
-            return _unitOfWork.Product.GetImageProductColors(productId, colors);
+            return await _unitOfWork.Product.GetImageProductColors(productId, colors);
+        }
+
+        public async Task<IEnumerable<AvailableProductsDto>> GetAvailableProducts(Guid productId, Guid colorId)
+        {
+            return await _unitOfWork.ProductQuantity.GetAvailableProducts(productId, colorId);
         }
     }
 }

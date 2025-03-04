@@ -14,5 +14,6 @@ namespace DataAccess.Repositories
         public SizeRepository(SneakersDbContext context) : base(context)
         {
         }
+
     }
 }

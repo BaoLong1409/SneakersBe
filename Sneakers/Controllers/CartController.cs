@@ -31,40 +31,23 @@ namespace Sneakers.Controllers
         [Route("cart/addProduct")]
         public async Task<IActionResult> AddProductToCart([FromBody] ManageProductInCartDto product, Guid userId)
         {
-            var cart = await _unitOfWork.Cart.GetFirstOrDefaultAsync(c => c.UserId == userId);
-            if (cart == null) {
-                return NotFound("Cart Not Found");
-            }
-
-            var productStockQuantity = await _unitOfWork.ProductQuantity
-                .GetFirstOrDefaultAsync(c => 
-                c.ProductId == product.ProductId && 
-                c.SizeId == product.SizeId && 
-                c.ColorId == product.ColorId
-                );
-            if (productStockQuantity == null) {
-                return NotFound("Product Not Found");
-            }
-
-            if (productStockQuantity.StockQuantity < product.Quantity)
+            var res = await _cartService.AddProductToCart(product, userId);
+            return res switch
             {
-                return BadRequest(new { message = "Not Enough Product In Stock" });
-            }
+                EnumProductCart.CartNotFound => NotFound(new { status = EnumProductCart.CartNotFound.ToString(), message = "Cart Not Found" }),
+                EnumProductCart.ProductNotFound => NotFound(new { status = EnumProductCart.ProductNotFound.ToString(), message = "Product Not Found" }),
+                EnumProductCart.NotEnoughInStock => BadRequest(new { status = EnumProductCart.NotEnoughInStock.ToString(), message = "Not Enough In Stock" }),
+                EnumProductCart.Success => Ok(new {status = EnumProductCart.Success.ToString(), message = "Add Product To Cart Completely" }),
+                _ => StatusCode(500, new { message = "Unknown Error" } )
+            };
 
-            var productToAddCart = _mapper.Map<ProductCart>(product);
-            productToAddCart.CartId = cart.Id;
-
-            _unitOfWork.ProductCart.Add(productToAddCart);
-            _unitOfWork.Complete();
-
-            return Ok(new { message = "Add Product Complete" });
         }
 
         [HttpGet]
         [Route("cart/getProduct")]
-        public async Task<IActionResult> GetProductFromCart(Guid userId)
+        public async Task<IActionResult> GetProductsFromCart(Guid userId)
         {
-            var products = await _cartService.GetProductInCartsAsync(userId);
+            var products = await _cartService.GetProductsInCartAsync(userId);
             return Ok(products);
         }
 
@@ -75,11 +58,11 @@ namespace Sneakers.Controllers
             var status = await _cartService.UpdateProductInCart(product, userId);
             return status switch
             {
-                EnumProductCart.CartNotFound => NotFound("Cart Not Found"),
-                EnumProductCart.ProductNotFound => NotFound("Product Not Found"),
-                EnumProductCart.NotEnoughInStock => BadRequest(new { message = "Not Enough Product In Stock" }),
-                EnumProductCart.NotExist => Ok(new { message = "Product does not exist, but add completely" }),
-                EnumProductCart.Success => Ok(new { message = "Update Product Completely" }),
+                EnumProductCart.CartNotFound => NotFound(new { status = EnumProductCart.CartNotFound.ToString(), message = "Cart Not Found" }),
+                EnumProductCart.ProductNotFound => NotFound(new { status = EnumProductCart.ProductNotFound.ToString(), message = "Product Not Found" }),
+                EnumProductCart.NotEnoughInStock => BadRequest(new { status = EnumProductCart.NotEnoughInStock.ToString(), message = "Not Enough In Stock" }),
+                EnumProductCart.NotExist => Ok(new { status = EnumProductCart.NotExist.ToString(), message = "Product does not exist, but add completely" }),
+                EnumProductCart.Success => Ok(new { status = EnumProductCart.Success.ToString(), message = "Update Product Completely" }),
                 _ => StatusCode(500, "Unknown Error")
             };
         }

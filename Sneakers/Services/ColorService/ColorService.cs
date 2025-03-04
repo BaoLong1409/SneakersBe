@@ -19,5 +19,10 @@ namespace Sneakers.Services.ColorService
         {
             return await _unitOfWork.Color.GetProductColors(productId);
         }
+
+        public async Task<Color?> GetColorFromColorName(String colorName)
+        {
+            return await _unitOfWork.Color.GetFirstOrDefaultAsync(c => c.Name == colorName);
+        }
     }
 }

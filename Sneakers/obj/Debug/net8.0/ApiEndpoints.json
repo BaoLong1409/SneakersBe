@@ -43,7 +43,7 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.CartController",
-    "Method": "GetProductFromCart",
+    "Method": "GetProductsFromCart",
     "RelativePath": "api/v1/cart/getProduct",
     "HttpMethod": "GET",
     "IsController": true,
@@ -116,8 +116,29 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.ProductController",
-    "Method": "GetImageProductColors",
-    "RelativePath": "api/v1/product/getImageProductColors",
+    "Method": "GetAvaiableSizes",
+    "RelativePath": "api/v1/product/getAvailableSizes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "colorName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "GetImageColorsProduct",
+    "RelativePath": "api/v1/product/getImageColorsProduct",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
