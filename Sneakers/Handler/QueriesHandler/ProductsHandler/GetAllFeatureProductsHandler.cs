@@ -15,7 +15,7 @@ namespace Sneakers.Handler.QueriesHandler.FeatureProductsHandler
         }
         public async Task<List<FeatureProductModel>> Handle(GetAllFeatureProducts request, CancellationToken cancellationToken)
         {
-            var query = "SELECT fp.ImageUrl, p.Name, fp.LeftColor, fp.MiddleColor, fp.RightColor " +
+            var query = "SELECT fp.ImageUrl, p.Name, p.Price, p.Sale, fp.LeftColor, fp.MiddleColor, fp.RightColor " +
                 "FROM FeatureProducts fp " +
                 "INNER JOIN Product p ON fp.ProductId = p.Id ";
             using (var connection = _context.CreateConnection()) {

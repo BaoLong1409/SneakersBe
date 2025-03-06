@@ -73,8 +73,9 @@ namespace Sneakers.Services.CartService
             var cart = await _unitOfWork.Cart.GetFirstOrDefaultAsync(x => x.UserId == userId);
 
             if (cart == null) return new List<ProductInCartDto>();
+            var products = await _unitOfWork.ProductCart.GetProductInCartsAsync(cart.Id);
 
-            return await _unitOfWork.ProductCart.GetProductInCartsAsync(cart.Id);
+            return products.OrderBy(x => x.Name).ToList();
         }
 
         public async Task<EnumProductCart> UpdateProductInCart(ManageProductInCartDto product, Guid userId)
