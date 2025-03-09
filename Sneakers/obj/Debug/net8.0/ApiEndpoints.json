@@ -111,6 +111,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "CreateLinkToPay",
+    "RelativePath": "api/v1/order/pay",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Sneakers.Controllers.ProductController",
     "Method": "GetAllProducts",
     "RelativePath": "api/v1/product/getAll",

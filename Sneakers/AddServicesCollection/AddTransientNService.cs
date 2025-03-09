@@ -22,6 +22,7 @@ using Sneakers.Services.ColorService;
 using Sneakers.Services.ProductService;
 using Domain.ViewModel.Product;
 using Sneakers.Services.OrderService;
+using Sneakers.Services.VnpayService;
 
 
 namespace Sneakers.AddServicesCollection
@@ -49,11 +50,14 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<ColorService>();
             services.AddScoped<ProductService>();
             services.AddScoped<OrderService>();
+            services.AddScoped<VnpayService>();
 
             services.AddTransient<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
             services.AddTransient<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();
             services.AddTransient<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
             services.AddTransient<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
+
+            services.AddHttpContextAccessor();
         }
 
         public static void ConfigureServices(this IServiceCollection service, IConfiguration config)

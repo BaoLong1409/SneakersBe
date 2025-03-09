@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel.Order;
+using Sneakers.Services.VnpayService;
 using System.Transactions;
 
 namespace Sneakers.Services.OrderService
@@ -29,7 +30,8 @@ namespace Sneakers.Services.OrderService
                 return (EnumOrder.NeedAddress, null);
             }
 
-            if (orderRequest.OrderDetails == null) {
+            if (orderRequest.OrderDetails == null)
+            {
                 return (EnumOrder.CreateOrderFail, null);
             }
 
@@ -66,9 +68,11 @@ namespace Sneakers.Services.OrderService
                     return (EnumOrder.CreateOrderFail, null);
                 }
             }
+        }
 
-            
-
+        public async Task <Order?> GetOrderById(Guid orderId)
+        {
+            return await _unitOfWork.Order.GetFirstOrDefaultAsync(x => x.Id == orderId);
         }
     }
 }

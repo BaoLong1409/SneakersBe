@@ -3,6 +3,7 @@ using Domain.Enum;
 using Domain.ViewModel.Order;
 using Microsoft.AspNetCore.Mvc;
 using Sneakers.Services.OrderService;
+using Sneakers.Services.VnpayService;
 
 namespace Sneakers.Controllers
 {
@@ -11,9 +12,11 @@ namespace Sneakers.Controllers
     public class OrderController : Controller
     {
         private readonly OrderService _orderService;
-        public OrderController(OrderService orderService)
+        private readonly VnpayService _vnpayService;
+        public OrderController(OrderService orderService, VnpayService vnpayService)
         {
             _orderService = orderService;
+            _vnpayService = vnpayService;
         }
         [HttpPost]
         [Route("order/addOrder")]
@@ -28,6 +31,22 @@ namespace Sneakers.Controllers
                 EnumOrder.NeedAddress => BadRequest(new { status = EnumOrder.NeedAddress.ToString(), message = "Need Address" }),
                 _ => StatusCode(500, new { message = "Unknown Error" })
             };
+        }
+
+        [HttpGet]
+        [Route("order/pay")]
+        public async Task<IActionResult> CreateLinkToPay(Guid orderId)
+        {
+            var order = await _orderService.GetOrderById(orderId);
+            if (order == null) {
+                return BadRequest(new { status = EnumOrder.OrderNotFound.ToString(), message = "Order Not Found" });
+            }
+            var vnpayLink = _vnpayService.CreateRequestLink(order);
+            return Ok(new
+            {
+                status = "Success",
+                paymentUrl = vnpayLink
+            });
         }
     }
 }
