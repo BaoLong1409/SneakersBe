@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Domain.ViewModel;
+using Domain.ViewModel.Cart;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Domain.ViewModel;
+using Domain.ViewModel.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

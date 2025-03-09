@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.ViewModel
+namespace Domain.ViewModel.User
 {
     public class UserRegistration
     {
         [Required]
-        public required String FirstName { get; set; }
+        public required string FirstName { get; set; }
         [Required]
-        public required String LastName { get; set; }
+        public required string LastName { get; set; }
         [Required, EmailAddress]
         public required string Email { get; set; }
         [Required]

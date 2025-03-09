@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
-using Domain.ViewModel;
+using Domain.ViewModel.Cart;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sneakers.Services.CartService;
@@ -74,9 +74,9 @@ namespace Sneakers.Controllers
             var status = await _cartService.DeleteProductInCart(product, userId);
             return status switch
             {
-                EnumProductCart.ProductNotFound => NotFound("Product Not Found"),
-                EnumProductCart.CartNotFound => NotFound("Cart Not Found"),
-                EnumProductCart.Success => Ok(new { message = "Delete Product Completely" }),
+                EnumProductCart.CartNotFound => NotFound(new { status = EnumProductCart.CartNotFound.ToString(), message = "Cart Not Found" }),
+                EnumProductCart.ProductNotFound => NotFound(new { status = EnumProductCart.ProductNotFound.ToString(), message = "Product Not Found" }),
+                EnumProductCart.Success => Ok(new { status = EnumProductCart.Success.ToString(), message = "Update Product Completely" }),
                 _ => StatusCode(500, "Unknown Error")
             };
         }

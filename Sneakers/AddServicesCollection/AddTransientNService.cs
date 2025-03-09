@@ -14,13 +14,14 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Sneakers.Features.Queries.FeatureProducts;
 using MediatR;
 using Sneakers.Handler.QueriesHandler.FeatureProductsHandler;
-using Domain.ViewModel;
 using Sneakers.Features.Queries.Products;
 using Sneakers.Handler.QueriesHandler.ProductsHandler;
 using Sneakers.Services.CartService;
 using Sneakers.Services.SizeService;
 using Sneakers.Services.ColorService;
 using Sneakers.Services.ProductService;
+using Domain.ViewModel.Product;
+using Sneakers.Services.OrderService;
 
 
 namespace Sneakers.AddServicesCollection
@@ -37,12 +38,17 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<ISizeRepository, SizeRepository>();
             services.AddScoped<IColorRepository, ColorRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<CartService>();
             services.AddScoped<SizeService>();
             services.AddScoped<ColorService>();
             services.AddScoped<ProductService>();
+            services.AddScoped<OrderService>();
 
             services.AddTransient<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
             services.AddTransient<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();

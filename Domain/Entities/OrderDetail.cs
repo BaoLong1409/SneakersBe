@@ -17,7 +17,7 @@ namespace Domain.Entities
         [Required]
         public required int Quantity { get; set; }
         [Required]
-        public Decimal PriceAtOrder { get; set; }   
+        public Decimal PriceAtOrder { get; set; }
         [Required]
         public required Guid OrderId { get; set; }
         public Order? Order { get; set; }

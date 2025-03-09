@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
-using Domain.ViewModel;
+using Domain.ViewModel.Product;
 
 namespace Sneakers.Services.ProductService
 {

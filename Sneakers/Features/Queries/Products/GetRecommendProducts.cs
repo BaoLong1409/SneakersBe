@@ -1,4 +1,4 @@
-﻿using Domain.ViewModel;
+﻿using Domain.ViewModel.Product;
 using MediatR;
 
 namespace Sneakers.Features.Queries.Products

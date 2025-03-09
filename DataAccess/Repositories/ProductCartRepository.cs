@@ -1,7 +1,7 @@
 ﻿using DataAccess.DbContext;
 using Domain.Entities;
 using Domain.Interfaces;
-using Domain.ViewModel;
+using Domain.ViewModel.Cart;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

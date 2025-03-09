@@ -21,6 +21,7 @@ namespace DataAccess.DbContext
         public DbSet<Category> Category { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
+        public DbSet<OrderStatusHistory> OrderStatusHistory { get; set; }
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Color> Color { get; set; }
         public DbSet<Size> Size { get; set; }

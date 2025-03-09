@@ -19,7 +19,9 @@ namespace DataAccess.UnitOfWork
         public IProductQuantityRepository ProductQuantity { get; private set; }
         public ISizeRepository Size { get; private set; }
         public IColorRepository Color { get; private set; }
-
+        public IOrderRepository Order { get; private set; }
+        public IOrderDetailRepository OrderDetail { get; private set; }
+        public IOrderStatusHistoryRepository OrderStatusHistory { get; private set; }
 
 
         public UnitOfWork(SneakersDbContext context)
@@ -32,6 +34,9 @@ namespace DataAccess.UnitOfWork
             ProductQuantity = new ProductQuantityRepository(_context);
             Size = new SizeRepository(_context);
             Color = new ColorRepository(_context);
+            Order = new OrderRepository(_context);
+            OrderDetail = new OrderDetailRepository(_context);
+            OrderStatusHistory = new OrderStatusHistoryRepository(_context);
         }
 
         public int Complete()

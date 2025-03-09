@@ -15,6 +15,9 @@ namespace Domain.Interfaces
         ICartRepository Cart { get; }
         ISizeRepository Size { get; }
         IColorRepository Color { get; }
+        IOrderRepository Order { get; }
+        IOrderDetailRepository OrderDetail { get; }
+        IOrderStatusHistoryRepository OrderStatusHistory { get; }
         int Complete();
     }
 }

@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
-using Domain.ViewModel;
+using Domain.ViewModel.Cart;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Sneakers.Services.CartService
@@ -17,12 +17,22 @@ namespace Sneakers.Services.CartService
             _mapper = mapper;
         }
 
+        private Cart CreateNewCart(Cart cart, Guid userId)
+        {
+            _unitOfWork.Cart.Add(cart);
+            return cart;
+        }
+
         public async Task<EnumProductCart> AddProductToCart( ManageProductInCartDto product, Guid userId)
         {
             var cart = await _unitOfWork.Cart.GetFirstOrDefaultAsync(c => c.UserId == userId);
             if (cart == null)
             {
-                return EnumProductCart.CartNotFound;
+                cart = CreateNewCart(new Cart
+                {
+                    TotalProducts = 1,
+                    UserId = userId
+                }, userId);
             }
 
             var productStockQuantity = await _unitOfWork.ProductQuantity
@@ -47,6 +57,7 @@ namespace Sneakers.Services.CartService
 
             if (productInCart == null) {
                 _unitOfWork.ProductCart.Add(productToAddCart);
+                cart.TotalProducts = cart.TotalProducts + 1;
                 _unitOfWork.Complete();
                 return EnumProductCart.Success;
             }
@@ -54,6 +65,7 @@ namespace Sneakers.Services.CartService
             {
                 return EnumProductCart.NotEnoughInStock;
             }
+
             productInCart.Quantity += product.Quantity;
             _unitOfWork.Complete();
             return EnumProductCart.Success;
@@ -115,6 +127,7 @@ namespace Sneakers.Services.CartService
             if (existingProduct == null)
             {
                 _unitOfWork.ProductCart.Add(productToAddCart);
+                cart.TotalProducts = cart.TotalProducts + 1;
                 _unitOfWork.Complete();
                 return EnumProductCart.NotExist;
             }
@@ -134,7 +147,14 @@ namespace Sneakers.Services.CartService
         {
             var cart = await _unitOfWork.Cart.GetFirstOrDefaultAsync(x => x.UserId == userId);
 
-            if (cart == null) return EnumProductCart.CartNotFound;
+            if (cart == null)
+            {
+                cart = CreateNewCart(new Cart
+                {
+                    TotalProducts = 1,
+                    UserId = userId
+                }, userId);
+            }
 
             var existingProduct = await _unitOfWork.ProductCart.GetFirstOrDefaultAsync(pc =>
             pc.CartId == cart.Id &&
@@ -146,7 +166,7 @@ namespace Sneakers.Services.CartService
             if (existingProduct == null) {
                 return EnumProductCart.ProductNotFound;
             }
-
+            cart.TotalProducts = cart.TotalProducts - 1;
             _unitOfWork.ProductCart.Remove(existingProduct);
             _unitOfWork.Complete();
 

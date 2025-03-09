@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

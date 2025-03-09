@@ -1,7 +1,7 @@
 ﻿using Azure;
 using Dapper;
 using DataAccess.DbContext;
-using Domain.ViewModel;
+using Domain.ViewModel.Product;
 using MediatR;
 using Sneakers.Features.Queries.Products;
 using System.Text.Json;

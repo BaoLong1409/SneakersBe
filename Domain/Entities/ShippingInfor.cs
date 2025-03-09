@@ -14,15 +14,15 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Required]
-        public required string FullName { get; set; }
+        public required String FullName { get; set; }
         [EmailAddress]
-        public string? Email {  get; set; }
+        public String? Email {  get; set; }
         [Required]
         [RegularExpression(@"^(03|05|07|08|09)\d{8}$")]
-        public required string PhoneNumber { get; set; }
+        public required String PhoneNumber { get; set; }
         [Required]
-        public required string Address { get; set; }
-        public string? Note { get; set; }
+        public required String Address { get; set; }
+        public String? Note { get; set; }
         [Required]
         public int IsMainAddress { get; set; }
 

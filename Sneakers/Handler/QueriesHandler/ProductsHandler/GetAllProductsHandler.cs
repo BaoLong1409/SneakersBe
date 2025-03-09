@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using DataAccess.DbContext;
 using Domain.Entities;
-using Domain.ViewModel;
+using Domain.ViewModel.Product;
 using MediatR;
 using Sneakers.Features.Queries.FeatureProducts;
 

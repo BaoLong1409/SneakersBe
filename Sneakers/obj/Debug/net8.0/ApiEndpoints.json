@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "product",
-        "Type": "Domain.ViewModel.ManageProductInCartDto",
+        "Type": "Domain.ViewModel.Cart.ManageProductInCartDto",
         "IsRequired": true
       },
       {
@@ -30,7 +30,7 @@
     "Parameters": [
       {
         "Name": "product",
-        "Type": "Domain.ViewModel.ManageProductInCartDto",
+        "Type": "Domain.ViewModel.Cart.ManageProductInCartDto",
         "IsRequired": true
       },
       {
@@ -67,7 +67,7 @@
     "Parameters": [
       {
         "Name": "product",
-        "Type": "Domain.ViewModel.ManageProductInCartDto",
+        "Type": "Domain.ViewModel.Cart.ManageProductInCartDto",
         "IsRequired": true
       },
       {
@@ -90,6 +90,22 @@
         "Name": "productId",
         "Type": "System.Guid",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "CreateOrder",
+    "RelativePath": "api/v1/order/addOrder",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderRequest",
+        "Type": "Domain.ViewModel.Order.CreateOrderRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -266,7 +282,7 @@
     "Parameters": [
       {
         "Name": "loginModel",
-        "Type": "Domain.ViewModel.LoginModel",
+        "Type": "Domain.ViewModel.User.LoginModel",
         "IsRequired": true
       }
     ],
@@ -282,7 +298,7 @@
     "Parameters": [
       {
         "Name": "userModel",
-        "Type": "Domain.ViewModel.UserRegistration",
+        "Type": "Domain.ViewModel.User.UserRegistration",
         "IsRequired": true
       }
     ],

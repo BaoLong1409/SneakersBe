@@ -14,21 +14,25 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Required]
-        public required string Status { get; set; }
-        [Required]
         public required DateTime OrderDate { get; set; }
-        public DateTime ShippingDate { get; set; }
+        public DateTime? ShippingDate { get; set; }
         [Required]
         public required Decimal TotalMoney { get; set; }
-        [Required]
-        public required Guid UserId { get; set; }
+        public String? Note { get; set; }
+        public String? FullName { get; set; }
+        [RegularExpression(@"^(03|05|07|08|09)\d{8}$")]
+        public String? PhoneNumber { get; set; }
+        public String? ShippingAddress { get; set; }
+        public Guid? UserId { get; set; }
         public User? User { get; set; }
         [Required]
         public required Guid ShippingId { get; set; }
         public Shipping? Shipping { get; set; }
+        public Guid? ShippingInforId { get; set; }
+        public ShippingInfor? ShippingInfor { get; set; }
         [Required]
         public required Guid PaymentId { get; set; }
         public Payment? Payment { get; set; }
-        public List<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetail>? OrderDetails { get; set; }
     }
 }
