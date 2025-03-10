@@ -70,9 +70,21 @@ namespace Sneakers.Services.OrderService
             }
         }
 
-        public async Task <Order?> GetOrderById(Guid orderId)
+        public async Task<Order?> GetOrderById(Guid orderId)
         {
             return await _unitOfWork.Order.GetFirstOrDefaultAsync(x => x.Id == orderId);
+        }
+
+        public async Task<EnumOrder> UpdateOrderSuccessPayment(Guid orderId)
+        {
+            var orderStatus = await _unitOfWork.OrderStatusHistory.GetFirstOrDefaultAsync(x => x.OrderId == orderId);
+            if (orderStatus == null)
+            {
+                return EnumOrder.OrderNotFound;
+            }
+            orderStatus.Status = EnumOrderStatus.Paid.ToString();
+            _unitOfWork.Complete();
+            return EnumOrder.UpdateOrderSuccess;
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using Domain.Entities;
+using Domain.Enum;
+using System.Collections.Specialized;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 
 namespace Sneakers.Services.VnpayService
 {
@@ -36,43 +39,110 @@ namespace Sneakers.Services.VnpayService
             //{
             //}
             vnp_Params.Add("vnp_Locale", "vn");
-            vnp_Params.Add("vnp_OrderInfo", $"Thanh toan hoa don {orderInfo.Id}. So tien: {(int)orderInfo.TotalMoney * 10000} VND");
+            vnp_Params.Add("vnp_OrderInfo", $"Thanh toan hoa don {orderInfo.Id}. So tien: {(int)orderInfo.TotalMoney * 25000 * 100} VND");
             vnp_Params.Add("vnp_OrderType", "other");
             vnp_Params.Add("vnp_ExpireDate", DateTime.UtcNow.AddHours(7).AddMinutes(15).ToString("yyyyMMddHHmmss"));
 
             vnp_Params.Add("vnp_CurrCode", "VND");
             string txnRef = orderInfo.Id.ToString("N");
             vnp_Params.Add("vnp_TxnRef", txnRef);
-            vnp_Params.Add("vnp_Amount", ((int)orderInfo.TotalMoney * 10000).ToString());
+            vnp_Params.Add("vnp_Amount", ((int)orderInfo.TotalMoney * 25000 * 100).ToString());
             vnp_Params.Add("vnp_ReturnUrl", vnp_ReturnUrl);
             vnp_Params.Add("vnp_IpAddr", GetIpAddress());
             vnp_Params.Add("vnp_CreateDate", DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
 
             vnp_Params = vnp_Params.OrderBy(o => o.Key).ToDictionary(k => k.Key, v => v.Value);
 
-            StringBuilder data = new StringBuilder();
-            foreach (KeyValuePair<string, string> kv in vnp_Params)
-            {
-                if (!String.IsNullOrEmpty(kv.Value))
-                {
-                    data.Append(WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&");
-                }
-            }
-            string queryString = data.ToString();
+            string queryString = GetResponseData(vnp_Params);
 
             vnp_Url += "?" + queryString;
             String signData = queryString;
             if (signData.Length > 0)
             {
-
-                signData = signData.Remove(data.Length - 1, 1);
+                signData = signData.Remove(signData.Length - 1, 1);
             }
             string vnp_SecureHash = HmacSHA512(vnp_HashSecret, signData);
             vnp_Url += "vnp_SecureHash=" + vnp_SecureHash;
 
             return vnp_Url;
-
         }
+
+        public (EnumTransactionStatus status, Guid orderId) CheckCodeUrl(String queryString)
+        {
+            string vnp_ReturnUrl = _configuration["VnPay:ReturnUrl"];
+            string vnp_Url = _configuration["VnPay:Url"];
+            string vnp_TmnCode = _configuration["VnPay:TmnCode"];
+            string vnp_HashSecret = _configuration["VnPay:HashSecret"];
+            Dictionary<string, string> vnp_Params = new Dictionary<string, string>();
+
+            NameValueCollection queryCollection = HttpUtility.ParseQueryString(queryString);
+            foreach (string key in queryCollection)
+            {
+                if (!string.IsNullOrEmpty(key))
+                {
+                    string value = queryCollection[key] ?? string.Empty;
+                    vnp_Params.Add(key, value);
+                }
+            }
+
+            vnp_Params["vnp_Amount"] = (Int64.Parse(vnp_Params["vnp_Amount"]) / 100).ToString();
+
+            string vnp_ResponseCode = vnp_Params["vnp_ResponseCode"];
+            string orderIdQuery = vnp_Params["vnp_TxnRef"];
+            Guid orderId = Guid.ParseExact(orderIdQuery, "N");
+
+            if (vnp_Params.TryGetValue("vnp_SecureHash", out var secureHash))
+            {
+            }
+            else
+            {
+                secureHash = string.Empty;
+            }
+
+            if (!ValidateSignature(secureHash, vnp_HashSecret, vnp_Params))
+            {
+                throw new Exception("Invalid signature");
+            }
+            EnumTransactionStatus status = EnumTransactionStatusExtensions.GetTransactionStatus(vnp_ResponseCode);
+            return (status, orderId);
+        }
+
+        public bool ValidateSignature(string inputHash, string secretKey, Dictionary<string, string> vnp_Params)
+        {
+            string rspRaw = GetResponseData(vnp_Params);
+            string myCheckSum = HmacSHA512(secretKey, rspRaw);
+            return myCheckSum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private string GetResponseData(Dictionary<string, string> vnp_params)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (vnp_params.ContainsKey("vnp_SecureHashType"))
+            {
+                vnp_params.Remove("vnp_SecureHashType");
+            }
+            if (vnp_params.ContainsKey("vnp_SecureHash"))
+            {
+                vnp_params.Remove("vnp_SecureHash");
+            }
+
+            foreach (var item in vnp_params)
+            {
+                if (!String.IsNullOrEmpty(item.Value))
+                {
+                    sb.Append(WebUtility.UrlEncode(item.Key) + "=" + WebUtility.UrlEncode(item.Value) + "&");
+                }
+            }
+
+            if (sb.Length > 0)
+            {
+                sb.Remove(sb.Length - 1, 1);
+            }
+
+            return sb.ToString();
+        }
+
+
 
         private string GetIpAddress()
         {

@@ -8,9 +8,10 @@ namespace Domain.Enum
 {
     public enum EnumOrder
     {
+        CreateOrderSuccess,
+        UpdateOrderSuccess,
         OrderNotFound,
         CreateOrderFail,
-        CreateOrderSuccess,
         NeedAddress
     }
 }

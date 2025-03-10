@@ -4,6 +4,8 @@ using Domain.ViewModel.Order;
 using Microsoft.AspNetCore.Mvc;
 using Sneakers.Services.OrderService;
 using Sneakers.Services.VnpayService;
+using System.Collections.Specialized;
+using System.Web;
 
 namespace Sneakers.Controllers
 {
@@ -34,7 +36,7 @@ namespace Sneakers.Controllers
         }
 
         [HttpGet]
-        [Route("order/pay")]
+        [Route("order/pay/vnpay")]
         public async Task<IActionResult> CreateLinkToPay(Guid orderId)
         {
             var order = await _orderService.GetOrderById(orderId);
@@ -47,6 +49,47 @@ namespace Sneakers.Controllers
                 status = "Success",
                 paymentUrl = vnpayLink
             });
+        }
+
+        //[HttpGet]
+        //[Route("order/vnpay-ipn")]
+        //public IActionResult GetResponseFromVnPay()
+        //{
+
+        //}
+
+        [HttpGet]
+        [Route("order/vnpay-return")]
+        public async Task<IActionResult> VnpayReturn(String queryString)
+        {
+            try
+            {
+                (EnumTransactionStatus status, Guid orderId) = _vnpayService.CheckCodeUrl(queryString);
+                if (status == EnumTransactionStatus.Success) {
+                    EnumOrder orderStatus = await _orderService.UpdateOrderSuccessPayment(orderId);
+                    if (orderStatus == EnumOrder.UpdateOrderSuccess)
+                    {
+                        return Ok(new
+                        {
+                            status = EnumTransactionStatus.Success,
+                            message = EnumTransactionStatusExtensions.GetMessage(status)
+                        });
+                    }
+                }
+
+                return BadRequest(new
+                {
+                    status = status,
+                    message = EnumTransactionStatusExtensions.GetMessage(status)
+                });
+            }
+            catch (Exception ex) {
+                return BadRequest(new
+                {
+                    status = EnumTransactionStatus.OtherError,
+                    message = $"Exception: {ex.Message}"
+                });
+            }
         }
     }
 }
