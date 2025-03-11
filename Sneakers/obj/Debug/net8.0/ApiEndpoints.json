@@ -113,7 +113,7 @@
   {
     "ContainingType": "Sneakers.Controllers.OrderController",
     "Method": "CreateLinkToPay",
-    "RelativePath": "api/v1/order/pay",
+    "RelativePath": "api/v1/order/pay/vnpay",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -121,6 +121,22 @@
       {
         "Name": "orderId",
         "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "VnpayReturn",
+    "RelativePath": "api/v1/order/vnpay-return",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "queryString",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -218,6 +234,16 @@
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ShippingController",
+    "Method": "GetAllShippingMethod",
+    "RelativePath": "api/v1/shipping/getAllMethods",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

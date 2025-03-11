@@ -87,7 +87,7 @@ namespace DataAccess.DbContext
 
             builder.Entity<Payment>().HasData(
                 new Payment { Id = SeedData.SeedData.CODPaymentId, Name = "COD" },
-                new Payment { Id = SeedData.SeedData.EWalletsPaymentId, Name = "E-Wallets" }
+                new Payment { Id = SeedData.SeedData.VNPayPaymentId, Name = "VNPay" }
             );
 
             builder.Entity<Shipping>().HasData(

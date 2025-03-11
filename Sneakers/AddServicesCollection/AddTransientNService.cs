@@ -23,6 +23,7 @@ using Sneakers.Services.ProductService;
 using Domain.ViewModel.Product;
 using Sneakers.Services.OrderService;
 using Sneakers.Services.VnpayService;
+using Sneakers.Services.ShippingService;
 
 
 namespace Sneakers.AddServicesCollection
@@ -42,6 +43,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
+            services.AddScoped<IShippingRepository, ShippingRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
@@ -50,6 +52,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<ColorService>();
             services.AddScoped<ProductService>();
             services.AddScoped<OrderService>();
+            services.AddScoped<ShippingService>();
             services.AddScoped<VnpayService>();
 
             services.AddTransient<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
