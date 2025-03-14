@@ -15,9 +15,11 @@ namespace DataAccess.AutoMapper
             CreateMap<User, UserDto>();
             CreateMap<ManageProductInCartDto, ProductCart>();
             CreateMap<OrderAddDto, Order>();
+            CreateMap<OrderUpdateRequest, Order>();
             CreateMap<OrderDetailDto, OrderDetail>();
+            CreateMap<OrderDetailReq, OrderDetail>();
+            CreateMap<OrderDetail, OrderDetailDto>();
             CreateMap<OrderStatusHistoryDto, OrderStatusHistory>();
-
         }
     }
 }

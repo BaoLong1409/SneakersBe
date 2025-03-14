@@ -97,7 +97,7 @@
   {
     "ContainingType": "Sneakers.Controllers.OrderController",
     "Method": "CreateOrder",
-    "RelativePath": "api/v1/order/addOrder",
+    "RelativePath": "api/v1/order/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -106,6 +106,22 @@
         "Name": "orderRequest",
         "Type": "Domain.ViewModel.Order.CreateOrderRequest",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "GetOrderDetail",
+    "RelativePath": "api/v1/order/getOrderDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -128,18 +144,38 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "UpdateOrder",
+    "RelativePath": "api/v1/order/update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "order",
+        "Type": "Domain.ViewModel.Order.OrderUpdateRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
     "Method": "VnpayReturn",
     "RelativePath": "api/v1/order/vnpay-return",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "queryString",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.PaymentController",
+    "Method": "GetAllPayments",
+    "RelativePath": "api/v1/payment/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -239,7 +275,7 @@
   {
     "ContainingType": "Sneakers.Controllers.ShippingController",
     "Method": "GetAllShippingMethod",
-    "RelativePath": "api/v1/shipping/getAllMethods",
+    "RelativePath": "api/v1/shipping/getAll",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

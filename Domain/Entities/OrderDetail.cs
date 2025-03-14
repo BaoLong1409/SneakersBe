@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
@@ -21,6 +16,12 @@ namespace Domain.Entities
         [Required]
         public required Guid OrderId { get; set; }
         public Order? Order { get; set; }
+        [Required]
+        public required Guid ColorId { get; set; }
+        public Color? Color { get; set; }
+        [Required]
+        public required Guid SizeId { get; set; }
+        public Size? Size { get; set; }
         [Required]
         public required Guid ProductId { get; set; }
         public Product? Product { get; set; }

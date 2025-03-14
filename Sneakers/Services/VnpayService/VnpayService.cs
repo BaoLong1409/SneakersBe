@@ -39,16 +39,16 @@ namespace Sneakers.Services.VnpayService
             //{
             //}
             vnp_Params.Add("vnp_Locale", "vn");
-            vnp_Params.Add("vnp_OrderInfo", $"Thanh toan hoa don {orderInfo.Id}. So tien: {(int)orderInfo.TotalMoney * 25000 * 100} VND");
+            vnp_Params.Add("vnp_OrderInfo", $"Thanh toan hoa don {orderInfo.Id}. So tien: {(long)orderInfo.TotalMoney * 25000 * 100} VND");
             vnp_Params.Add("vnp_OrderType", "other");
             vnp_Params.Add("vnp_ExpireDate", DateTime.UtcNow.AddHours(7).AddMinutes(15).ToString("yyyyMMddHHmmss"));
 
             vnp_Params.Add("vnp_CurrCode", "VND");
             string txnRef = orderInfo.Id.ToString("N");
             vnp_Params.Add("vnp_TxnRef", txnRef);
-            vnp_Params.Add("vnp_Amount", ((int)orderInfo.TotalMoney * 25000 * 100).ToString());
+            vnp_Params.Add("vnp_Amount", ((long)orderInfo.TotalMoney * 25000 * 100).ToString());
             vnp_Params.Add("vnp_ReturnUrl", vnp_ReturnUrl);
-            vnp_Params.Add("vnp_IpAddr", GetIpAddress());
+            vnp_Params.Add("vnp_IpAddr", GetIpAddress());   
             vnp_Params.Add("vnp_CreateDate", DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
 
             vnp_Params = vnp_Params.OrderBy(o => o.Key).ToDictionary(k => k.Key, v => v.Value);
@@ -57,12 +57,9 @@ namespace Sneakers.Services.VnpayService
 
             vnp_Url += "?" + queryString;
             String signData = queryString;
-            if (signData.Length > 0)
-            {
-                signData = signData.Remove(signData.Length - 1, 1);
-            }
+
             string vnp_SecureHash = HmacSHA512(vnp_HashSecret, signData);
-            vnp_Url += "vnp_SecureHash=" + vnp_SecureHash;
+            vnp_Url += "&vnp_SecureHash=" + vnp_SecureHash;
 
             return vnp_Url;
         }
@@ -85,7 +82,7 @@ namespace Sneakers.Services.VnpayService
                 }
             }
 
-            vnp_Params["vnp_Amount"] = (Int64.Parse(vnp_Params["vnp_Amount"]) / 100).ToString();
+            vnp_Params["vnp_Amount"] = (Int64.Parse(vnp_Params["vnp_Amount"])).ToString();
 
             string vnp_ResponseCode = vnp_Params["vnp_ResponseCode"];
             string orderIdQuery = vnp_Params["vnp_TxnRef"];
@@ -136,7 +133,7 @@ namespace Sneakers.Services.VnpayService
 
             if (sb.Length > 0)
             {
-                sb.Remove(sb.Length - 1, 1);
+                sb = sb.Remove(sb.Length - 1, 1);
             }
 
             return sb.ToString();

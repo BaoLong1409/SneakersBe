@@ -19,6 +19,7 @@ namespace Domain.Interfaces
         IOrderDetailRepository OrderDetail { get; }
         IOrderStatusHistoryRepository OrderStatusHistory { get; }
         IShippingRepository Shipping { get; }
+        IPaymentRepository Payment { get; }
         int Complete();
     }
 }

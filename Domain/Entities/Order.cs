@@ -23,15 +23,14 @@ namespace Domain.Entities
         [RegularExpression(@"^(03|05|07|08|09)\d{8}$")]
         public String? PhoneNumber { get; set; }
         public String? ShippingAddress { get; set; }
-        public Guid? UserId { get; set; }
-        public User? User { get; set; }
         [Required]
-        public required Guid ShippingId { get; set; }
+        public Guid UserId { get; set; }
+        public User? User { get; set; }
+        public Guid? ShippingId { get; set; }
         public Shipping? Shipping { get; set; }
         public Guid? ShippingInforId { get; set; }
         public ShippingInfor? ShippingInfor { get; set; }
-        [Required]
-        public required Guid PaymentId { get; set; }
+        public Guid? PaymentId { get; set; }
         public Payment? Payment { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }
     }

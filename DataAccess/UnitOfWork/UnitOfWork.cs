@@ -23,6 +23,7 @@ namespace DataAccess.UnitOfWork
         public IOrderDetailRepository OrderDetail { get; private set; }
         public IOrderStatusHistoryRepository OrderStatusHistory { get; private set; }
         public IShippingRepository Shipping { get; private set; }
+        public IPaymentRepository Payment { get; private set; }
 
 
         public UnitOfWork(SneakersDbContext context)
@@ -39,6 +40,7 @@ namespace DataAccess.UnitOfWork
             OrderDetail = new OrderDetailRepository(_context);
             OrderStatusHistory = new OrderStatusHistoryRepository(_context);
             Shipping = new ShippingRepository(_context);
+            Payment = new PaymentRepository(_context);
         }
 
         public int Complete()

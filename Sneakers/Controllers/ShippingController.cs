@@ -13,7 +13,7 @@ namespace Sneakers.Controllers
             _shippingService = shippingService;
         }
         [HttpGet]
-        [Route("shipping/getAllMethods")]
+        [Route("shipping/getAll")]
 
         public IActionResult GetAllShippingMethod()
         {

@@ -10,6 +10,6 @@ namespace Domain.ViewModel.Order
     public class CreateOrderRequest
     {
         public required OrderAddDto Order { get; set; }
-        public required List<OrderDetailDto> OrderDetails { get; set; }
+        public required List<OrderDetailReq> OrderDetails { get; set; }
     }
 }

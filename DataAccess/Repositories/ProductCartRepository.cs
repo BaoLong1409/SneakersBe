@@ -28,7 +28,7 @@ namespace DataAccess.Repositories
                     ProductId = pc.ProductId,
                     ColorId = pc.ColorId,
                     SizeId = pc.SizeId,
-                    Name = pc.Product.Name,
+                    Name = pc.Product!.Name,
                     Price = pc.Product.Price,
                     ImageUrl = pc.Product.ProductImages
                         .Where(pi => pi.IsThumbnail == 1 && pi.ColorId == pc.ColorId)

@@ -18,16 +18,11 @@ namespace Sneakers.Services.OrderService
             _unitOfWork = unitOfWork;
         }
 
-        public (EnumOrder status, Guid? orderId) AddOrder(CreateOrderRequest orderRequest)
+        public async Task<(EnumOrder status, Guid? orderId)> AddOrder(CreateOrderRequest orderRequest)
         {
             if (orderRequest.Order == null)
             {
                 return (EnumOrder.CreateOrderFail, null);
-            }
-
-            if (orderRequest.Order.ShippingAddress == null && orderRequest.Order.ShippingInforId == null)
-            {
-                return (EnumOrder.NeedAddress, null);
             }
 
             if (orderRequest.OrderDetails == null)
@@ -35,21 +30,49 @@ namespace Sneakers.Services.OrderService
                 return (EnumOrder.CreateOrderFail, null);
             }
 
+            Decimal totalMoney = 0;
+            foreach(var orderDetail in orderRequest.OrderDetails)
+            {
+                totalMoney += (decimal) orderDetail.PriceAtOrder * orderDetail.Quantity;
+            }
+
+            orderRequest.Order.TotalMoney = totalMoney;
+
             using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var order = _mapper.Map<Order>(orderRequest.Order);
-                List<OrderDetail> orderDetails = _mapper.Map<List<OrderDetail>>(orderRequest.OrderDetails);
-
-                var orderHistory = new OrderStatusHistoryDto
-                {
-                    Status = "Pending",
-                    Note = "Waitting Confirm From Store",
-                    UpdatedAt = DateTime.Now,
-                };
-                var orderStatusHistory = _mapper.Map<OrderStatusHistory>(orderHistory);
-
                 try
                 {
+                    string paymentName = null;
+                    if (orderRequest.Order.PaymentId.HasValue)
+                    {
+                        var payment = await _unitOfWork.Payment.GetByIdAsync(orderRequest.Order.PaymentId.Value);
+                        paymentName = payment?.Name;
+                    }
+
+                    var order = _mapper.Map<Order>(orderRequest.Order);
+                    List<OrderDetail> orderDetails = _mapper.Map<List<OrderDetail>>(orderRequest.OrderDetails);
+
+                    var orderHistory = new OrderStatusHistoryDto
+                    {
+                        Status = paymentName switch
+                        {
+                            null => "Pending",
+                            "COD" => "Success",
+                            "VnPay" => "Waiting for Payment",
+                            _ => "Unknown Payment Status"
+                        },
+                        Note = paymentName switch
+                        {
+                            null => "Waiting for user to select payment method",
+                            "COD" => "Order Successfully",
+                            "VnPay" => "Payment is being processed",
+                            _ => "Unknown payment method"
+                        },
+                        UpdatedAt = DateTime.Now,
+                    };
+
+                    var orderStatusHistory = _mapper.Map<OrderStatusHistory>(orderHistory);
+
                     _unitOfWork.Order.Add(order);
                     _unitOfWork.Complete();
 
@@ -60,6 +83,7 @@ namespace Sneakers.Services.OrderService
                     orderStatusHistory.OrderId = order.Id;
                     _unitOfWork.OrderStatusHistory.Add(orderStatusHistory);
                     _unitOfWork.Complete();
+
                     transaction.Complete();
                     return (EnumOrder.CreateOrderSuccess, order.Id);
                 }
@@ -75,16 +99,59 @@ namespace Sneakers.Services.OrderService
             return await _unitOfWork.Order.GetFirstOrDefaultAsync(x => x.Id == orderId);
         }
 
-        public async Task<EnumOrder> UpdateOrderSuccessPayment(Guid orderId)
+        public async Task <EnumOrder> UpdateOrder(OrderUpdateRequest orderUpdateReq)
         {
-            var orderStatus = await _unitOfWork.OrderStatusHistory.GetFirstOrDefaultAsync(x => x.OrderId == orderId);
-            if (orderStatus == null)
+            var existingOrder = await _unitOfWork.Order.GetByIdAsync(orderUpdateReq.OrderId);
+            if (existingOrder == null) return EnumOrder.OrderNotFound;
+            UpdateOrderCodSuccess(orderUpdateReq.OrderId);
+
+            _mapper.Map(orderUpdateReq, existingOrder);
+            _unitOfWork.Complete();
+            return EnumOrder.UpdateOrderSuccess;
+        }
+
+        public EnumOrder UpdateOrderSuccessPayment(Guid orderId)
+        {
+            var orderStatusDto = new OrderStatusHistoryDto
+            {
+                Status = "Paid",
+                Note = "Pay Successfully",
+                UpdatedAt = DateTime.Now,
+                OrderId = orderId
+            };
+
+            if (orderStatusDto == null)
             {
                 return EnumOrder.OrderNotFound;
             }
-            orderStatus.Status = EnumOrderStatus.Paid.ToString();
+
+            var orderStatus = _mapper.Map<OrderStatusHistory>(orderStatusDto);
+
+            _unitOfWork.OrderStatusHistory.Add(orderStatus);
             _unitOfWork.Complete();
-            return EnumOrder.UpdateOrderSuccess;
+            return EnumOrder.AddOrderStatusSuccess;
+        }
+
+        private EnumOrder UpdateOrderCodSuccess(Guid orderId)
+        {
+            var orderStatusDto = new OrderStatusHistoryDto
+            {
+                Status = "Success",
+                Note = "Order Successfully",
+                UpdatedAt = DateTime.Now,
+                OrderId = orderId
+            };
+
+            if (orderStatusDto == null)
+            {
+                return EnumOrder.OrderNotFound;
+            }
+
+            var orderStatus = _mapper.Map<OrderStatusHistory>(orderStatusDto);
+
+            _unitOfWork.OrderStatusHistory.Add(orderStatus);
+            _unitOfWork.Complete();
+            return EnumOrder.AddOrderStatusSuccess;
         }
     }
 }

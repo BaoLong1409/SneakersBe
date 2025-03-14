@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sneakers.Services.PaymentService;
 
 namespace Sneakers.Controllers
 {
@@ -6,12 +7,19 @@ namespace Sneakers.Controllers
     [Route("api/v1")]
     public class PaymentController : Controller
     {
-        public PaymentController()
+        private readonly PaymentService _paymentService;
+        public PaymentController(PaymentService paymentService)
         {
-            
+            _paymentService = paymentService;
         }
 
-
+        [HttpGet]
+        [Route("payment/getAll")]
+        public IActionResult GetAllPayments()
+        {
+            var payments = _paymentService.GetAllPayments();
+            return Ok(payments);
+        }
 
     }
 }

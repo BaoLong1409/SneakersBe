@@ -13,9 +13,9 @@ namespace Domain.ViewModel.Order
         public DateTime? ShippingDate { get; set; }
         public required Decimal TotalMoney { get; set; }
         public String? Note { get; set; }
-        public Guid? UserId { get; set; }
-        public required Guid ShippingId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid? ShippingId { get; set; }
         public Guid? ShippingInforId { get; set; }
-        public required Guid PaymentId { get; set; }
+        public Guid? PaymentId { get; set; }
     }
 }
