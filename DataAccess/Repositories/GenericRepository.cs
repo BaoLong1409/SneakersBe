@@ -38,6 +38,11 @@ namespace DataAccess.Repositories
             return _context.Set<T>().Where(expression).ToList();
         }
 
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().Where(expression).ToListAsync();
+        }
+
         public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> expression)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(expression);

@@ -12,6 +12,7 @@ namespace Domain.Interfaces
         Task<T?> GetByIdAsync(Guid id);
         IEnumerable<T> GetAll();
         IEnumerable<T> Find(Expression <Func<T, bool>> expression);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression);
         Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> expression);
         void Add (T entity);
         void AddRange (IEnumerable<T> entities);

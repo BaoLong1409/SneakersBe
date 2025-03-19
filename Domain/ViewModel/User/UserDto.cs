@@ -8,6 +8,7 @@
         public required string FirstName { get; set; }
         public required string AvatarUrl { get; set; }
         public required string LastName { get; set; }
+        public string? PhoneNumber { get; set; }
         public required string LanguageCode { get; set; }
         public required string Theme { get; set; }
     }

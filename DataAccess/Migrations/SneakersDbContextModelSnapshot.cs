@@ -208,7 +208,7 @@ namespace DataAccess.Migrations
                     b.Property<decimal>("TotalMoney")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -552,10 +552,10 @@ namespace DataAccess.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NewID()");
 
-                    b.Property<int>("MaximumDeliverdTime")
+                    b.Property<int>("MaximumDeliveredTime")
                         .HasColumnType("int");
 
-                    b.Property<int>("MinimumDeliverdTime")
+                    b.Property<int>("MinimumDeliveredTime")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -573,24 +573,24 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = new Guid("7e2f4c38-8a5b-402a-b8d1-5e9fbc3d7a92"),
-                            MaximumDeliverdTime = 7,
-                            MinimumDeliverdTime = 5,
+                            MaximumDeliveredTime = 7,
+                            MinimumDeliveredTime = 5,
                             Name = "Standard",
                             Price = 0.61m
                         },
                         new
                         {
                             Id = new Guid("d8a9c347-6e5a-4b11-bf9d-2f4e9c1a7d55"),
-                            MaximumDeliverdTime = 5,
-                            MinimumDeliverdTime = 3,
+                            MaximumDeliveredTime = 5,
+                            MinimumDeliveredTime = 3,
                             Name = "Express",
                             Price = 0.90m
                         },
                         new
                         {
                             Id = new Guid("c3b82e7d-1f92-4a50-a6b3-7d9e4f5c2a88"),
-                            MaximumDeliverdTime = -24,
-                            MinimumDeliverdTime = -12,
+                            MaximumDeliveredTime = -24,
+                            MinimumDeliveredTime = -12,
                             Name = "Ultra-Fast Delivery",
                             Price = 1.63m
                         });
@@ -918,7 +918,9 @@ namespace DataAccess.Migrations
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Payment");
 

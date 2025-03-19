@@ -20,6 +20,9 @@ namespace DataAccess.AutoMapper
             CreateMap<OrderDetailReq, OrderDetail>();
             CreateMap<OrderDetail, OrderDetailDto>();
             CreateMap<OrderStatusHistoryDto, OrderStatusHistory>();
+            CreateMap<ShippingInfoDto, ShippingInfor>();
+            CreateMap<ShippingInfor, ShippingInfoDto>();
+            CreateMap<UpdateUserRequest, User>();
         }
     }
 }

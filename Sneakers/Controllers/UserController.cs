@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Sneakers.Services.UserService;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -24,7 +26,8 @@ namespace Sneakers.Controllers
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
-        public UserController(IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, IEmailSender emailSender)
+        private readonly UserService _userService;
+        public UserController(IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, IEmailSender emailSender, UserService userService)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -32,6 +35,7 @@ namespace Sneakers.Controllers
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
+            _userService = userService;
         }
 
         [HttpPost]
@@ -175,6 +179,19 @@ namespace Sneakers.Controllers
             var user = _unitOfWork.User.GetUserByToken(token);
             var userInfor = _mapper.Map<UserDto>(user);
             return Ok(userInfor);
+        }
+
+        [HttpPut]
+        [Route("user/updateInfo")]
+        public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserRequest userInfo)
+        {
+            var (status, result) = await _userService.UpdateUserInformation(userInfo);
+            return status switch
+            {
+                Domain.Enum.EnumUser.UpdateSuccessfully => Ok(new { message = status.GetMessage(), data = result }),
+                Domain.Enum.EnumUser.NotExist => BadRequest(new {message = status.GetMessage()}),
+                _ => StatusCode(500, new { message = status.GetMessage() })
+            };
         }
 
 

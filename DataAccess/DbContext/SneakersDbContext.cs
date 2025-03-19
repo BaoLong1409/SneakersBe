@@ -91,9 +91,9 @@ namespace DataAccess.DbContext
             );
 
             builder.Entity<Shipping>().HasData(
-                new Shipping { Id = SeedData.SeedData.StandardShippingId, Name = "Standard", Price = 0.61m, MinimumDeliverdTime = 5, MaximumDeliverdTime = 7 },
-                new Shipping { Id = SeedData.SeedData.ExpressShippingId, Name = "Express", Price = 0.90m, MinimumDeliverdTime = 3, MaximumDeliverdTime = 5 },
-                new Shipping { Id = SeedData.SeedData.UltraFastShippingId, Name = "Ultra-Fast Delivery", Price = 1.63m, MinimumDeliverdTime = -12, MaximumDeliverdTime = -24 }
+                new Shipping { Id = SeedData.SeedData.StandardShippingId, Name = "Standard", Price = 0.61m, MinimumDeliveredTime = 5, MaximumDeliveredTime = 7 },
+                new Shipping { Id = SeedData.SeedData.ExpressShippingId, Name = "Express", Price = 0.90m, MinimumDeliveredTime = 3, MaximumDeliveredTime = 5 },
+                new Shipping { Id = SeedData.SeedData.UltraFastShippingId, Name = "Ultra-Fast Delivery", Price = 1.63m, MinimumDeliveredTime = -12, MaximumDeliveredTime = -24 }
             );
 
 

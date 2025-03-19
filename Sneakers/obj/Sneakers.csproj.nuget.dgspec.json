@@ -255,6 +255,10 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
+            "CloudinaryDotNet": {
+              "target": "Package",
+              "version": "[1.27.4, )"
+            },
             "Dapper": {
               "target": "Package",
               "version": "[2.1.35, )"

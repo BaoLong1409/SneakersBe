@@ -10,6 +10,7 @@ namespace Domain.Enum
     {
         CreateOrderSuccess,
         UpdateOrderSuccess,
+        UpdateQuantityFail,
         AddOrderStatusSuccess,
         OrderNotFound,
         CreateOrderFail,

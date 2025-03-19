@@ -112,8 +112,40 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "GetAllOrdersContr",
+    "RelativePath": "api/v1/order/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
     "Method": "GetOrderDetail",
     "RelativePath": "api/v1/order/getOrderDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "GetOrderInfo",
+    "RelativePath": "api/v1/order/getOrderInfo",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -274,12 +306,76 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.ShippingController",
+    "Method": "AddUserAddress",
+    "RelativePath": "api/v1/shipping/addUserAddress",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "shippingInfo",
+        "Type": "Domain.ViewModel.User.ShippingInfoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ShippingController",
+    "Method": "DeleteUserAddress",
+    "RelativePath": "api/v1/shipping/deleteUserAddress",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "shippingInfoId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ShippingController",
     "Method": "GetAllShippingMethod",
     "RelativePath": "api/v1/shipping/getAll",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ShippingController",
+    "Method": "GetListAddress",
+    "RelativePath": "api/v1/shipping/getUserAddress",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ShippingController",
+    "Method": "UpdateUserAddress",
+    "RelativePath": "api/v1/shipping/updateUserAddress",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "shippingInfo",
+        "Type": "Domain.ViewModel.User.ShippingInfoDto",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -377,6 +473,22 @@
       {
         "Name": "userModel",
         "Type": "Domain.ViewModel.User.UserRegistration",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "UpdateUserInfo",
+    "RelativePath": "api/v1/user/updateInfo",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userInfo",
+        "Type": "Domain.ViewModel.User.UpdateUserRequest",
         "IsRequired": true
       }
     ],

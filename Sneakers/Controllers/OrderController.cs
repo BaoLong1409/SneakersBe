@@ -39,6 +39,20 @@ namespace Sneakers.Controllers
         }
 
         [HttpGet]
+        [Route("order/getAll")]
+        public async Task<IActionResult> GetAllOrdersContr(Guid userId)
+        {
+            return Ok(await _orderService.GetAllOrdersSv(userId));
+        }
+
+        [HttpGet]
+        [Route("order/getOrderInfo")]
+        public async Task<IActionResult> GetOrderInfo(Guid orderId)
+        {
+            return Ok(await _orderService.GetOrderInfo(orderId));
+        }
+
+        [HttpGet]
         [Route("order/getOrderDetails")]
         public IActionResult GetOrderDetail(Guid orderId)
         {
@@ -58,6 +72,7 @@ namespace Sneakers.Controllers
             return orderStatus switch
             {
                 EnumOrder.UpdateOrderSuccess => Ok(new { status = EnumOrder.CreateOrderSuccess.ToString(), message = "Update Order Success" }),
+                EnumOrder.UpdateQuantityFail => BadRequest(new { status = EnumOrder.UpdateQuantityFail.ToString(), message = "Update Product Quantity Fail" }),
                 EnumOrder.OrderNotFound => BadRequest(new { status = EnumOrder.OrderNotFound.ToString(), message = "Order Not Found" }),
                 _ => StatusCode(500, new { message = "Unknown Error" })
             };
@@ -84,14 +99,19 @@ namespace Sneakers.Controllers
 
         [HttpGet]
         [Route("order/vnpay-return")]
-        public IActionResult VnpayReturn()
+        public async Task <IActionResult> VnpayReturn()
         {
             try
             {
                 var queryString = HttpContext.Request.QueryString.Value;
                 (EnumTransactionStatus status, Guid orderId) = _vnpayService.CheckCodeUrl(queryString);
                 if (status == EnumTransactionStatus.Success) {
-                    EnumOrder orderStatus = _orderService.UpdateOrderSuccessPayment(orderId);
+                    EnumOrder orderStatus = await _orderService.UpdateOrderSuccessPayment(orderId);
+                    if (orderStatus == EnumOrder.UpdateQuantityFail)
+                    {
+                        return BadRequest(new { status = EnumOrder.UpdateQuantityFail.ToString(), message = "Update Product Quantity Fail" });
+                    }
+
                     if (orderStatus == EnumOrder.AddOrderStatusSuccess)
                     {
                         return Ok(new

@@ -9,7 +9,7 @@ namespace Domain.ViewModel.Order
     public class OrderStatusHistoryDto
     {
         public required String Status { get; set; }
-        public String? Note { get; set; }
+        public String? StatusNote { get; set; }
         public DateTime UpdatedAt {  get; set; }
         public Guid OrderId { get; set; }
     }

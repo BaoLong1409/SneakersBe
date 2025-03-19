@@ -18,8 +18,8 @@ namespace Domain.Entities
         [Required]
         public Decimal Price { get; set; }
         [Required]
-        public required int MinimumDeliverdTime { get; set; }
+        public required int MinimumDeliveredTime { get; set; }
         [Required]
-        public required int MaximumDeliverdTime { get; set; }
+        public required int MaximumDeliveredTime { get; set; }
     }
 }

@@ -189,3 +189,5 @@ C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\obj\Debug\net8.0\Sneakers.sourcelink.json
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Castle.Core.dll
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Proxies.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\CloudinaryDotNet.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Newtonsoft.Json.dll

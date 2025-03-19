@@ -25,6 +25,10 @@ using Sneakers.Services.OrderService;
 using Sneakers.Services.VnpayService;
 using Sneakers.Services.ShippingService;
 using Sneakers.Services.PaymentService;
+using Sneakers.Features.Queries.Order;
+using Domain.ViewModel.Order;
+using Sneakers.Handler.QueriesHandler.OrderHandler;
+using Sneakers.Services.UserService;
 
 
 namespace Sneakers.AddServicesCollection
@@ -50,6 +54,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<CartService>();
+            services.AddScoped<UserService>();
             services.AddScoped<SizeService>();
             services.AddScoped<ColorService>();
             services.AddScoped<ProductService>();
@@ -59,10 +64,12 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<VnpayService>();
             services.AddScoped<PaymentService>();
 
-            services.AddTransient<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
-            services.AddTransient<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();
-            services.AddTransient<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
-            services.AddTransient<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
+            services.AddScoped<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
+            services.AddScoped<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();
+            services.AddScoped<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
+            services.AddScoped<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
+            services.AddScoped<IRequestHandler<GetOrderInfo, OrderInfoDto>, GetOrderInfoHandler>();
+            services.AddScoped<IRequestHandler<GetAllOrders, IEnumerable <AllOrdersDto>>, GetAllOrdersHandler>();
 
             services.AddHttpContextAccessor();
         }

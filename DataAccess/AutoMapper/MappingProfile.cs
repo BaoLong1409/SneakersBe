@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.ViewModel.Order;
 using Domain.ViewModel.User;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace DataAccess.AutoMapper
         {
             CreateMap<UserRegistration, User>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
+            CreateMap<OrderStatusHistoryDto, OrderStatusHistory>()
+                .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.StatusNote));
         }
     }
 }
