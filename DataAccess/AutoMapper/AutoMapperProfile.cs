@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.ViewModel.Cart;
+using Domain.ViewModel.Category;
 using Domain.ViewModel.Order;
 using Domain.ViewModel.User;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,7 @@ namespace DataAccess.AutoMapper
             CreateMap<ShippingInfoDto, ShippingInfor>();
             CreateMap<ShippingInfor, ShippingInfoDto>();
             CreateMap<UpdateUserRequest, User>();
+            CreateMap<Category, CategoryDto>();
         }
     }
 }

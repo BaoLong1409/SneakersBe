@@ -21,6 +21,7 @@ namespace Domain.Interfaces
         IShippingRepository Shipping { get; }
         IPaymentRepository Payment { get; }
         IShippingInfoRepository ShippingInfo { get; }
+        ICategoryRepository Category { get; }
         int Complete();
     }
 }

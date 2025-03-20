@@ -140,13 +140,30 @@ namespace Sneakers.Controllers
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo,
                     message = "Login successful!"
                 });
 
             }
 
             return Unauthorized(new { message = "Invalid password" });
+        }
+
+        [HttpPost]
+        [Route("user/googleLogin")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+        {
+            var (result, token) = await _userService.GoogleLogin(request.GoogleToken);
+            return result switch
+            {
+                EnumUser.LoginSuccess => Ok(new { token = token, message = result.GetMessage() }),
+                EnumUser.LoginFail => BadRequest(new { message = result.GetMessage() }),
+                EnumUser.InvalidEmail => Unauthorized(new {  message = result.GetMessage() }),
+                EnumUser.CreateRoleFail => BadRequest(new { message = result.GetMessage() }),
+                EnumUser.NotConfirmed => Unauthorized(new { message = result.GetMessage() }),
+                EnumUser.CreateUserFail => Unauthorized(new { message = result.GetMessage() }),
+
+                _ => StatusCode(500, new { message = "Unknown Error" })
+            };
         }
 
         [HttpGet]

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Interfaces;
+using Domain.ViewModel.Product;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sneakers.Features.Queries.FeatureProducts;
@@ -39,6 +40,22 @@ namespace Sneakers.Controllers
         public async Task<IActionResult> GetAllProducts()
         {
             return Ok(await _mediator.Send(new GetAllProducts()));
+        }
+
+        [HttpGet]
+        [Route("product/getAllWCondition")]
+        public async Task<IActionResult> GetAllProductsWithCondition([FromQuery] int[] priceFilter)
+        {
+            return Ok(await _productService.GetProductsWithCondition(priceFilter));
+        }
+
+        [HttpGet]
+        [Route("product/getAllByCategory")]
+        public async Task<IActionResult> GetAllProductsByCategory([FromQuery] GetProductsByCategoryReq req)
+        {
+            if (req.CategoryName == "null") req.CategoryName = null;
+            if (req.BrandName == "null") req.BrandName = null;
+            return Ok(await _productService.GetAllProductsByCategory(req));
         }
 
         [HttpGet]

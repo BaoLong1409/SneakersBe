@@ -29,6 +29,7 @@ using Sneakers.Features.Queries.Order;
 using Domain.ViewModel.Order;
 using Sneakers.Handler.QueriesHandler.OrderHandler;
 using Sneakers.Services.UserService;
+using Sneakers.Services.CategoryService;
 
 
 namespace Sneakers.AddServicesCollection
@@ -50,6 +51,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
             services.AddScoped<IShippingRepository, ShippingRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
@@ -63,9 +65,12 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<ShippingService>();
             services.AddScoped<VnpayService>();
             services.AddScoped<PaymentService>();
+            services.AddScoped<CategoryService>();
 
             services.AddScoped<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
             services.AddScoped<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();
+            services.AddScoped<IRequestHandler<GetAllProductsWithCondition, IEnumerable<AllProductsDto>>, GetAllProductsWithConditionHandler>();
+            services.AddScoped<IRequestHandler<GetAllProductsByCategory, IEnumerable<AllProductsDto>>, GetAllProductsByCategoryHandler>();
             services.AddScoped<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
             services.AddScoped<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
             services.AddScoped<IRequestHandler<GetOrderInfo, OrderInfoDto>, GetOrderInfoHandler>();

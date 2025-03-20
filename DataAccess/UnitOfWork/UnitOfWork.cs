@@ -25,6 +25,7 @@ namespace DataAccess.UnitOfWork
         public IShippingRepository Shipping { get; private set; }
         public IPaymentRepository Payment { get; private set; }
         public IShippingInfoRepository ShippingInfo { get; private set; }
+        public ICategoryRepository Category { get; private set; }
 
 
         public UnitOfWork(SneakersDbContext context)
@@ -43,6 +44,7 @@ namespace DataAccess.UnitOfWork
             Shipping = new ShippingRepository(_context);
             Payment = new PaymentRepository(_context);
             ShippingInfo = new ShippingInfoRepository(_context);
+            Category = new CategoryRepository(_context);
         }
 
         public int Complete()

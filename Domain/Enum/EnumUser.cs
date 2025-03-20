@@ -12,7 +12,14 @@ namespace Domain.Enum
         UpdateFail,
         DeleteSuccessfully,
         DeleteFail,
-        NotExist
+        NotExist,
+        InvalidEmail,
+        NotConfirmed,
+        InvalidPassword,
+        LoginSuccess,
+        LoginFail,
+        CreateRoleFail,
+        CreateUserFail
     }
 
     public static class EnumUserMessage
@@ -26,6 +33,13 @@ namespace Domain.Enum
                 EnumUser.DeleteSuccessfully => "User information deleted successfully.",
                 EnumUser.DeleteFail => "Failed to delete user information. Please try again later.",
                 EnumUser.NotExist => "User Information do not exist.",
+                EnumUser.InvalidEmail => "Your email is invalid.",
+                EnumUser.NotConfirmed => "Your email has not been confirmed.",
+                EnumUser.InvalidPassword => "Your Password is invalid.",
+                EnumUser.LoginSuccess => "Login Successfully!",
+                EnumUser.LoginFail => "Login fail!",
+                EnumUser.CreateRoleFail => "Create new role failed!",
+                EnumUser.CreateUserFail => "Create new user failed!",
                 _ => "An unknown error occurred."
             };
         }

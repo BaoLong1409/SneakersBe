@@ -79,6 +79,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Sneakers.Controllers.CategoryController",
+    "Method": "GetAllCategory",
+    "RelativePath": "api/v1/category/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Sneakers.Controllers.ColorController",
     "Method": "GetProductColors",
     "RelativePath": "api/v1/color/getProductColors",
@@ -222,12 +232,49 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "GetAllProductsByCategory",
+    "RelativePath": "api/v1/product/getAllByCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CategoryName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "BrandName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
     "Method": "GetFeatureProducts",
     "RelativePath": "api/v1/product/getAllFeatureProducts",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "GetAllProductsWithCondition",
+    "RelativePath": "api/v1/product/getAllWCondition",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "priceFilter",
+        "Type": "System.Int32[]",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -442,6 +489,22 @@
         "Name": "token",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "GoogleLogin",
+    "RelativePath": "api/v1/user/googleLogin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Domain.ViewModel.User.GoogleLoginRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

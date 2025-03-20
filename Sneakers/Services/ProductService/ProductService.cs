@@ -2,6 +2,9 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.ViewModel.Product;
+using MediatR;
+using Sneakers.Features.Queries.Products;
+using System.Diagnostics;
 
 namespace Sneakers.Services.ProductService
 {
@@ -10,10 +13,12 @@ namespace Sneakers.Services.ProductService
 
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public ProductService(IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly IMediator _mediator;
+        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, IMediator mediator)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _mediator = mediator;
         }
 
         public async Task<IEnumerable<ImageProductDto>> GetImageProductColor(Guid productId, IEnumerable<Color> colors)
@@ -24,6 +29,16 @@ namespace Sneakers.Services.ProductService
         public async Task<IEnumerable<AvailableProductsDto>> GetAvailableProducts(Guid productId, Guid colorId)
         {
             return await _unitOfWork.ProductQuantity.GetAvailableProducts(productId, colorId);
+        }
+
+        public async Task<IEnumerable<AllProductsDto>> GetProductsWithCondition(int[] priceFilter)
+        {
+            return await _mediator.Send(new GetAllProductsWithCondition(priceFilter));
+        }
+
+        public async Task<IEnumerable<AllProductsDto>> GetAllProductsByCategory(GetProductsByCategoryReq req)
+        {
+            return await _mediator.Send(new GetAllProductsByCategory(req.CategoryName, req.BrandName));
         }
     }
 }

@@ -263,6 +263,10 @@
               "target": "Package",
               "version": "[2.1.35, )"
             },
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.69.0, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.4.1, )"

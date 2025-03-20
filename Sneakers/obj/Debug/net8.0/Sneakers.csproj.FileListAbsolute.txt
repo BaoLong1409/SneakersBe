@@ -191,3 +191,8 @@ C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\CloudinaryDotNet.dll
 C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Google.Apis.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Google.Apis.Auth.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\Google.Apis.Core.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\System.Management.dll
+C:\Users\AD\OneDrive\Desktop\Projects\Sneakers\Sneakers\Sneakers\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
