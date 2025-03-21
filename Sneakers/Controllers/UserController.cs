@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -162,6 +163,28 @@ namespace Sneakers.Controllers
                 EnumUser.NotConfirmed => Unauthorized(new { message = result.GetMessage() }),
                 EnumUser.CreateUserFail => Unauthorized(new { message = result.GetMessage() }),
 
+                _ => StatusCode(500, new { message = "Unknown Error" })
+            };
+        }
+
+        [HttpPost]
+        [Route("user/changePassword")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest changePassReq)
+        {
+            var authHeader = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized(new { message = EnumUser.TokenInvalid.GetMessage() });
+            }
+
+            var token = authHeader.Substring("Beaer ".Length).Trim();
+            var result = await _userService.ChangePassword(changePassReq, token);
+            return result switch
+            {
+                EnumUser.ChangePasswordSuccess => Ok(new { message = result.GetMessage() }),
+                EnumUser.ChangePasswordFail => BadRequest(new { message = result.GetMessage() }),
+                EnumUser.DuplicatePassword => BadRequest(new { message = result.GetMessage() }),
                 _ => StatusCode(500, new { message = "Unknown Error" })
             };
         }

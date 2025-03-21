@@ -40,7 +40,6 @@ namespace Sneakers.Controllers
                 EnumProductCart.Success => Ok(new {status = EnumProductCart.Success.ToString(), message = "Add Product To Cart Completely" }),
                 _ => StatusCode(500, new { message = "Unknown Error" } )
             };
-
         }
 
         [HttpGet]

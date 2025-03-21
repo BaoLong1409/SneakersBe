@@ -437,6 +437,22 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.UserController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/v1/user/changePassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "changePassReq",
+        "Type": "Domain.ViewModel.User.ChangePasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.UserController",
     "Method": "ChangeTheme",
     "RelativePath": "api/v1/user/changeTheme",
     "HttpMethod": "PUT",

@@ -13,6 +13,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Transactions;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sneakers.Services.UserService
 {
@@ -35,7 +36,7 @@ namespace Sneakers.Services.UserService
             _roleManager = roleManager;
         }
 
-        public async Task<(EnumUser, UserDto)> UpdateUserInformation(UpdateUserRequest userInfo)
+        public async Task<(EnumUser, UserDto?)> UpdateUserInformation(UpdateUserRequest userInfo)
         {
             string? avatarUrl = null;
             if (userInfo.AvatarFile != null)
@@ -141,6 +142,26 @@ namespace Sneakers.Services.UserService
 
 
             return (EnumUser.LoginFail, null);
+        }
+
+        public async Task<EnumUser> ChangePassword(ChangePasswordRequest changePassReq, string token)
+        {
+            if (changePassReq.OldPassword.Equals(changePassReq.NewPassword))
+            {
+                return EnumUser.DuplicatePassword;
+            }
+            var user = _unitOfWork.User.GetUserByToken(token);
+            if (user == null) {
+                return EnumUser.TokenInvalid;
+            }
+
+            var changePassRes = await _userManager.ChangePasswordAsync(user, changePassReq.OldPassword, changePassReq.NewPassword);
+            if (!changePassRes.Succeeded)
+            {
+                return EnumUser.ChangePasswordFail;
+            }
+
+            return EnumUser.ChangePasswordSuccess;
         }
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)

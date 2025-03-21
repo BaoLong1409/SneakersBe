@@ -13,13 +13,18 @@ namespace Domain.Enum
         DeleteSuccessfully,
         DeleteFail,
         NotExist,
+        InvalidPhoneNumber,
         InvalidEmail,
         NotConfirmed,
         InvalidPassword,
         LoginSuccess,
         LoginFail,
         CreateRoleFail,
-        CreateUserFail
+        CreateUserFail,
+        TokenInvalid,
+        ChangePasswordSuccess,
+        ChangePasswordFail,
+        DuplicatePassword
     }
 
     public static class EnumUserMessage
@@ -40,6 +45,11 @@ namespace Domain.Enum
                 EnumUser.LoginFail => "Login fail!",
                 EnumUser.CreateRoleFail => "Create new role failed!",
                 EnumUser.CreateUserFail => "Create new user failed!",
+                EnumUser.TokenInvalid => "Your token is invalid!",
+                EnumUser.ChangePasswordSuccess => "Your password has been changed successfully!",
+                EnumUser.ChangePasswordFail => "Your password change failed!",
+                EnumUser.DuplicatePassword => "Your old and new password have to different!",
+                EnumUser.InvalidPhoneNumber => "Your phone number is invalid!",
                 _ => "An unknown error occurred."
             };
         }
