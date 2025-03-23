@@ -24,7 +24,13 @@ namespace Domain.Enum
         TokenInvalid,
         ChangePasswordSuccess,
         ChangePasswordFail,
-        DuplicatePassword
+        ResetPasswordSuccess,
+        ResetPasswordFail,
+        DuplicatePassword,
+        SpamOTP,
+        SentOTP,
+        AccurateOTP,
+        WrongOTP
     }
 
     public static class EnumUserMessage
@@ -48,8 +54,14 @@ namespace Domain.Enum
                 EnumUser.TokenInvalid => "Your token is invalid!",
                 EnumUser.ChangePasswordSuccess => "Your password has been changed successfully!",
                 EnumUser.ChangePasswordFail => "Your password change failed!",
+                EnumUser.ResetPasswordSuccess => "Your password has been reset successfully!",
+                EnumUser.ResetPasswordFail => "Your password reset failed!",
                 EnumUser.DuplicatePassword => "Your old and new password have to different!",
                 EnumUser.InvalidPhoneNumber => "Your phone number is invalid!",
+                EnumUser.SpamOTP => "You have requested too many OTPs in a short time, please try again in 30 minutes!",
+                EnumUser.SentOTP => "Your OTP was sent, please check your email!",
+                EnumUser.AccurateOTP => "Your OTP is correct, please continue set your new password!",
+                EnumUser.WrongOTP => "Your OTP is wrong, please try again!",
                 _ => "An unknown error occurred."
             };
         }

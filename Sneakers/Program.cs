@@ -13,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<SneakersDapperContext>();
+builder.Services.AddMemoryCache();
 
 builder.Services.ConfigureTransient();
 builder.Services.ConfigureServices(builder.Configuration);

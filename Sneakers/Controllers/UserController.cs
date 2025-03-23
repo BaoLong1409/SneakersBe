@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Sneakers.Services.OTPService;
 using Sneakers.Services.UserService;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -28,7 +29,8 @@ namespace Sneakers.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
         private readonly UserService _userService;
-        public UserController(IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, IEmailSender emailSender, UserService userService)
+        private readonly OTPService _oTPService;
+        public UserController(IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, IEmailSender emailSender, UserService userService, OTPService otpService)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -37,6 +39,7 @@ namespace Sneakers.Controllers
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
             _userService = userService;
+            _oTPService = otpService;
         }
 
         [HttpPost]
@@ -106,13 +109,15 @@ namespace Sneakers.Controllers
         [Route("user/login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
-            if (user == null) {
-                return Unauthorized(new {message = "Invalid email"});
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Invalid email" });
             }
 
             if (!user.EmailConfirmed)
@@ -158,7 +163,7 @@ namespace Sneakers.Controllers
             {
                 EnumUser.LoginSuccess => Ok(new { token = token, message = result.GetMessage() }),
                 EnumUser.LoginFail => BadRequest(new { message = result.GetMessage() }),
-                EnumUser.InvalidEmail => Unauthorized(new {  message = result.GetMessage() }),
+                EnumUser.InvalidEmail => Unauthorized(new { message = result.GetMessage() }),
                 EnumUser.CreateRoleFail => BadRequest(new { message = result.GetMessage() }),
                 EnumUser.NotConfirmed => Unauthorized(new { message = result.GetMessage() }),
                 EnumUser.CreateUserFail => Unauthorized(new { message = result.GetMessage() }),
@@ -178,7 +183,7 @@ namespace Sneakers.Controllers
                 return Unauthorized(new { message = EnumUser.TokenInvalid.GetMessage() });
             }
 
-            var token = authHeader.Substring("Beaer ".Length).Trim();
+            var token = authHeader.Substring("Bearer ".Length).Trim();
             var result = await _userService.ChangePassword(changePassReq, token);
             return result switch
             {
@@ -188,6 +193,90 @@ namespace Sneakers.Controllers
                 _ => StatusCode(500, new { message = "Unknown Error" })
             };
         }
+
+        [HttpPost]
+        [Route("user/resetPassword")]
+        [Authorize]
+        public async Task<IActionResult> SetNewPassword([FromBody] SetNewPasswordRequest newPassReq)
+        {
+            var authHeader = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized(new { message = EnumUser.TokenInvalid.GetMessage() });
+            }
+
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+            var result = await _userService.SetNewPassword(newPassReq, token);
+            return result switch
+            {
+                EnumUser.ResetPasswordSuccess => Ok(new { message = result.GetMessage() }),
+                EnumUser.ResetPasswordFail => BadRequest(new { message = result.GetMessage() }),
+                EnumUser.WrongOTP => BadRequest(new { message = result.GetMessage() }),
+                _ => StatusCode(500, new { message = "Unknown Error" })
+            };
+        }
+
+        [HttpGet]
+        [Route("user/forgetPassword/getOTP")]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound(new { message = EnumUser.NotExist.GetMessage() });
+            }
+
+            // Tạo OTP và gửi email
+            var (status, otp) = _oTPService.GenerateAndStoreOTP(email);
+
+            if (status == EnumUser.SpamOTP)
+            {
+                return BadRequest(new {message = status.GetMessage()});
+            }
+
+            var emailBody = $@"
+        <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 8px; max-width: 500px; margin: auto;'>
+            <h2 style='color: #d9534f; text-align: center;'>Reset Your Password</h2>
+            <p style='color: #333; text-align: center;'>Hello,</p>
+            <p style='color: #333; text-align: center;'>
+                We received a request to reset your password. Use the OTP below to proceed:
+            </p>
+            <div style='text-align: center; margin-top: 20px;'>
+                <span style='font-size: 24px; font-weight: bold; color: #d9534f; letter-spacing: 5px;'>{otp}</span>
+            </div>
+            <p style='color: #555; text-align: center; margin-top: 20px;'>
+                If you didn’t request a password reset, please ignore this email.
+            </p>
+            <p style='color: #999; text-align: center; font-size: 12px; margin-top: 20px;'>
+                This email was sent by Sneakers. Please do not reply.
+            </p>
+        </div>";
+
+            await _emailSender.SendEmailAsync(user.Email, "Reset Your Password - Sneakers", emailBody);
+
+            return Ok(new {message = EnumUser.SentOTP.GetMessage()});
+        }
+
+        [HttpPost]
+        [Route("user/forgetPassword/validateOTP")]
+        public ActionResult ValidateOTP(ValidateOTPRequest req)
+        {
+            var checkOTP = _oTPService.ValidateOTP(req.Email, req.OTP);
+
+            if (!checkOTP) {
+                return BadRequest(new { message = EnumUser.WrongOTP.GetMessage() });
+            }
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, req.Email),
+                new Claim("OTPVerified", "1")
+            };
+            JwtSecurityToken jwtToken = _userService.GetSessionToken(authClaims);
+            string tokenString = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+
+            return Ok(new {message = EnumUser.AccurateOTP.GetMessage(), sessionToken = tokenString });
+        }
+
 
         [HttpGet]
         [Route("user/confirmationEmail")]
@@ -229,7 +318,7 @@ namespace Sneakers.Controllers
             return status switch
             {
                 Domain.Enum.EnumUser.UpdateSuccessfully => Ok(new { message = status.GetMessage(), data = result }),
-                Domain.Enum.EnumUser.NotExist => BadRequest(new {message = status.GetMessage()}),
+                Domain.Enum.EnumUser.NotExist => BadRequest(new { message = status.GetMessage() }),
                 _ => StatusCode(500, new { message = status.GetMessage() })
             };
         }
@@ -240,8 +329,9 @@ namespace Sneakers.Controllers
         public async Task<IActionResult> ChangeTheme(Guid id, string theme)
         {
             var user = await FindUserById(id);
-            if (user == null) {
-                return BadRequest(new {message = "User does not exist"});
+            if (user == null)
+            {
+                return BadRequest(new { message = "User does not exist" });
             }
 
             user.Theme = theme;
@@ -249,11 +339,12 @@ namespace Sneakers.Controllers
             return Ok();
         }
 
-        private async Task<UserDto?> FindUserById (Guid id)
+        private async Task<UserDto?> FindUserById(Guid id)
         {
             var user = await _unitOfWork.User.GetByIdAsync(id);
             var userDto = _mapper.Map<UserDto>(user);
-            if (userDto == null) {
+            if (userDto == null)
+            {
                 return null;
             }
             return userDto;

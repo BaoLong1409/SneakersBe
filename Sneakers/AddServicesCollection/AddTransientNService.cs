@@ -30,6 +30,7 @@ using Domain.ViewModel.Order;
 using Sneakers.Handler.QueriesHandler.OrderHandler;
 using Sneakers.Services.UserService;
 using Sneakers.Services.CategoryService;
+using Sneakers.Services.OTPService;
 
 
 namespace Sneakers.AddServicesCollection
@@ -66,6 +67,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<VnpayService>();
             services.AddScoped<PaymentService>();
             services.AddScoped<CategoryService>();
+            services.AddScoped<OTPService>();
 
             services.AddScoped<IRequestHandler<GetAllFeatureProducts, List<FeatureProductModel>>, GetAllFeatureProductsHandler>();
             services.AddScoped<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();

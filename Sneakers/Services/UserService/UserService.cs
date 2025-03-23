@@ -164,7 +164,31 @@ namespace Sneakers.Services.UserService
             return EnumUser.ChangePasswordSuccess;
         }
 
-        private JwtSecurityToken GetToken(List<Claim> authClaims)
+        public async Task<EnumUser> SetNewPassword(SetNewPasswordRequest setNewPassReq, string token)
+        {
+            var user = _unitOfWork.User.GetUserByToken(token);
+            if (user == null)
+            {
+                return EnumUser.TokenInvalid;
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var otpVerified = jwtToken.Claims.FirstOrDefault(c => c.Type == "OTPVerified")?.Value;
+            if (otpVerified == "1")
+            {
+                var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var changePassRes = await _userManager.ResetPasswordAsync(user, resetToken, setNewPassReq.NewPassword);
+                if (changePassRes.Succeeded)
+                {
+                    return EnumUser.ResetPasswordSuccess;
+                }
+
+                return EnumUser.ResetPasswordFail;
+            }
+            return EnumUser.WrongOTP;
+        }
+
+        public JwtSecurityToken GetToken(List<Claim> authClaims)
         {
             var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
 
@@ -172,6 +196,19 @@ namespace Sneakers.Services.UserService
                 issuer: _configuration["JWT:Issuer"],
                 audience: _configuration["JWT:Audience"],
                 expires: DateTime.UtcNow.AddDays(5),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha256)
+            );
+        }
+
+        public JwtSecurityToken GetSessionToken(List<Claim> authClaims)
+        {
+            var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+
+            return new JwtSecurityToken(
+                issuer: _configuration["JWT:Issuer"],
+                audience: _configuration["JWT:Audience"],
+                expires: DateTime.UtcNow.AddMinutes(3),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha256)
             );
