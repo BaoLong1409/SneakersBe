@@ -33,8 +33,8 @@ namespace DataAccess.DbContext
         public DbSet<ProductCategory> ProductCategory { get; set; }
         public DbSet<ProductImage> ProductImage { get; set; }
         public DbSet<ProductQuantity> ProductQuantity { get; set; }
-        public DbSet<Rating> Rating { get; set; }
-        public DbSet<Comment> Comment { get; set; }
+        public DbSet<ProductReview> ProductReview { get; set; }
+        public DbSet<ProductReviewImage> ProductReviewImage { get; set; }
         public DbSet<Shipping> Shipping { get; set; }
         public DbSet<ShippingInfor> ShippingInfor { get; set; }
 
@@ -51,25 +51,13 @@ namespace DataAccess.DbContext
                 }
             }
 
-            builder.Entity<Comment>()
+            builder.Entity<ProductReview>()
                 .HasOne(c => c.User)
                 .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Comment>()
-                .HasOne(c => c.OrderDetail)
-                .WithMany()
-                .HasForeignKey(c => c.OrderDetailId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Rating>()
-                .HasOne(c => c.User)
-                .WithMany()
-                .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Rating>()
+            builder.Entity<ProductReview>()
                 .HasOne(c => c.OrderDetail)
                 .WithMany()
                 .HasForeignKey(c => c.OrderDetailId)
@@ -84,6 +72,7 @@ namespace DataAccess.DbContext
             {
                 entity.ToTable(name: "Role");
             });
+
 
             builder.Entity<Payment>().HasData(
                 new Payment { Id = SeedData.SeedData.CODPaymentId, Name = "COD" },

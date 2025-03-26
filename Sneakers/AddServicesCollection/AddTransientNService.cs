@@ -31,6 +31,9 @@ using Sneakers.Handler.QueriesHandler.OrderHandler;
 using Sneakers.Services.UserService;
 using Sneakers.Services.CategoryService;
 using Sneakers.Services.OTPService;
+using Sneakers.Features.Queries.ProductReview;
+using Domain.ViewModel.ProductReview;
+using Sneakers.Handler.QueriesHandler.ProductReviewHandler;
 
 
 namespace Sneakers.AddServicesCollection
@@ -47,6 +50,8 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<ISizeRepository, SizeRepository>();
             services.AddScoped<IColorRepository, ColorRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
+            services.AddScoped<IProductReviewImageRepository, ProductReviewImageRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
@@ -61,6 +66,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<SizeService>();
             services.AddScoped<ColorService>();
             services.AddScoped<ProductService>();
+            services.AddScoped<ProductReviewService>();
             services.AddScoped<OrderService>();
             services.AddScoped<OrderDetailService>();
             services.AddScoped<ShippingService>();
@@ -73,10 +79,13 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<IRequestHandler<GetAllProducts, IEnumerable<AllProductsDto>>, GetAllProductsHandler>();
             services.AddScoped<IRequestHandler<GetAllProductsWithCondition, IEnumerable<AllProductsDto>>, GetAllProductsWithConditionHandler>();
             services.AddScoped<IRequestHandler<GetAllProductsByCategory, IEnumerable<AllProductsDto>>, GetAllProductsByCategoryHandler>();
+            services.AddScoped<IRequestHandler<SearchAllProducts, IEnumerable<AllProductsDto>>, SearchAllProductsHandler>();
             services.AddScoped<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
             services.AddScoped<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
             services.AddScoped<IRequestHandler<GetOrderInfo, OrderInfoDto>, GetOrderInfoHandler>();
             services.AddScoped<IRequestHandler<GetAllOrders, IEnumerable <AllOrdersDto>>, GetAllOrdersHandler>();
+            services.AddScoped<IRequestHandler<GetProductsAreWaittingReview, IEnumerable<ProductsAreWaitingReviewDto>>, GetProductsAreWaitingReviewHandler>();
+            services.AddScoped<IRequestHandler<GetCommentOfProduct, IEnumerable<ProductReviewDto>>, GetCommentOfProductHandler>();
 
             services.AddHttpContextAccessor();
         }

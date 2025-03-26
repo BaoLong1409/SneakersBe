@@ -352,6 +352,75 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "SeachAllProducts",
+    "RelativePath": "api/v1/product/searchAllProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductReviewController",
+    "Method": "GetProductComment",
+    "RelativePath": "api/v1/review/getComment",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProductId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "ColorName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductReviewController",
+    "Method": "GetProductsWaittingReview",
+    "RelativePath": "api/v1/review/getToReview",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductReviewController",
+    "Method": "ReviewProduct",
+    "RelativePath": "api/v1/review/post",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Domain.ViewModel.ProductReview.ProductReviewRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Sneakers.Controllers.ShippingController",
     "Method": "AddUserAddress",
     "RelativePath": "api/v1/shipping/addUserAddress",

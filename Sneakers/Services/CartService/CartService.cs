@@ -30,6 +30,7 @@ namespace Sneakers.Services.CartService
             {
                 cart = CreateNewCart(new Cart
                 {
+                    Id = Guid.NewGuid(),
                     TotalProducts = 1,
                     UserId = userId
                 }, userId);

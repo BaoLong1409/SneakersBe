@@ -1,5 +1,6 @@
 ﻿using DataAccess.DbContext;
 using DataAccess.Repositories;
+using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace DataAccess.UnitOfWork
         public IProductCartRepository ProductCart { get; private set; }
         public ICartRepository Cart { get; private set; }
         public IProductQuantityRepository ProductQuantity { get; private set; }
+        public IProductReviewRepository ProductReview { get; private set; }
+        public IProductReviewImageRepository ProductReviewImage { get; private set; }
         public ISizeRepository Size { get; private set; }
         public IColorRepository Color { get; private set; }
         public IOrderRepository Order { get; private set; }
@@ -36,6 +39,8 @@ namespace DataAccess.UnitOfWork
             ProductCart = new ProductCartRepository(_context);
             Cart = new CartRepository(_context);
             ProductQuantity = new ProductQuantityRepository(_context);
+            ProductReview = new ProductReviewRepository(_context);
+            ProductReviewImage = new ProductReviewImageRepository(_context);
             Size = new SizeRepository(_context);
             Color = new ColorRepository(_context);
             Order = new OrderRepository(_context);

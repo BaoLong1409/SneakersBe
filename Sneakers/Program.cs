@@ -2,6 +2,8 @@ using DataAccess.DbContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sneakers.AddServicesCollection;
+using Sneakers.DataSeeder;
+using System.Data.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,14 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    await DataSeeder.SeedRoleAsync(services);
+    await DataSeeder.SeedAdminAsync(services);
+}
 
 
 // Configure the HTTP request pipeline.

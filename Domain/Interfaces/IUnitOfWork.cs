@@ -12,6 +12,8 @@ namespace Domain.Interfaces
         IProductRepository Product { get; }
         IProductCartRepository ProductCart { get; }
         IProductQuantityRepository ProductQuantity { get; }
+        IProductReviewRepository ProductReview { get; }
+        IProductReviewImageRepository ProductReviewImage { get; }
         ICartRepository Cart { get; }
         ISizeRepository Size { get; }
         IColorRepository Color { get; }

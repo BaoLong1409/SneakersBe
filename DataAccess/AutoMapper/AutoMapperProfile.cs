@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.ViewModel.Cart;
 using Domain.ViewModel.Category;
 using Domain.ViewModel.Order;
+using Domain.ViewModel.ProductReview;
 using Domain.ViewModel.User;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,6 +16,7 @@ namespace DataAccess.AutoMapper
             CreateMap<IdentityRole<Guid>, Role>();
             CreateMap<User, UserDto>();
             CreateMap<ManageProductInCartDto, ProductCart>();
+            CreateMap<ProductReviewRequest, ProductReview>();
             CreateMap<OrderAddDto, Order>();
             CreateMap<OrderUpdateRequest, Order>();
             CreateMap<OrderDetailDto, OrderDetail>();

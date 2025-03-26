@@ -15,7 +15,7 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
         }
         public async Task<IEnumerable<AllProductsDto>> Handle(GetAllProductsByCategory request, CancellationToken cancellationToken)
         {
-            var query = @"SELECT DISTINCT p.Id, p.Name, p.Price, p.Sale, c.Id AS ColorId, c.Name AS ColorName, i.Id AS ImageId, i.ImageUrl AS ThumbnailUrl
+            var query = @"SELECT DISTINCT p.Id, p.Name, p.Price, p.Sale, ct.Name AS CategoryName, ct.Brand, c.Id AS ColorId, c.Name AS ColorName, i.Id AS ImageId, i.ImageUrl AS ThumbnailUrl
                         FROM Product p 
                         INNER JOIN ProductImage i ON p.Id = i.ProductId AND i.IsThumbnail = 1
                         INNER JOIN ProductQuantity pq ON pq.ProductId = p.Id AND pq.ColorId = i.ColorId

@@ -13,5 +13,6 @@ namespace Domain.ViewModel.Order
         public required Guid ProductId { get; set; }
         public Guid ColorId { get; set; }
         public Guid SizeId { get; set; }
+        public int Reviewed { get; set; } = 0;
     }
 }

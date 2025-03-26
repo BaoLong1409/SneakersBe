@@ -43,6 +43,13 @@ namespace Sneakers.Controllers
         }
 
         [HttpGet]
+        [Route("product/searchAllProducts")]
+        public async Task<IActionResult> SeachAllProducts(string? keyword)
+        {
+            return Ok(await _mediator.Send(new SearchAllProducts(keyword ?? "")));
+        }
+
+        [HttpGet]
         [Route("product/getAllWCondition")]
         public async Task<IActionResult> GetAllProductsWithCondition([FromQuery] int[] priceFilter)
         {

@@ -15,11 +15,13 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
         }
         public async Task<IEnumerable<AllProductsDto>> Handle(GetAllProductsWithCondition request, CancellationToken cancellationToken)
         {
-            var query = @"SELECT DISTINCT p.Id, p.Name, p.Price, p.Sale, c.Id AS ColorId, c.Name AS ColorName, i.Id AS ImageId, i.ImageUrl AS ThumbnailUrl
+            var query = @"SELECT DISTINCT p.Id, p.Name, p.Price, p.Sale, ct.Name AS CategoryName, ct.Brand, c.Id AS ColorId, c.Name AS ColorName,  i.Id AS ImageId, i.ImageUrl AS ThumbnailUrl
                         FROM Product p 
                         INNER JOIN ProductImage i ON p.Id = i.ProductId AND i.IsThumbnail = 1
                         INNER JOIN ProductQuantity pq ON pq.ProductId = p.Id AND pq.ColorId = i.ColorId
                         INNER JOIN Color c ON c.Id = pq.ColorId
+                        INNER JOIN ProductCategory pc ON pc.ProductId = p.Id
+                        INNER JOIN Category ct ON ct.Id = pc.CategoryId
                         WHERE p.Price BETWEEN @MinValue AND @MaxValue
                         ORDER BY p.Id, c.Id";
             var productDic = new Dictionary<Guid, AllProductsDto>();

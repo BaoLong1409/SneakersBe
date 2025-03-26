@@ -14,6 +14,5 @@ namespace DataAccess.SeedData
         public static readonly Guid StandardShippingId = Guid.Parse("7e2f4c38-8a5b-402a-b8d1-5e9fbc3d7a92");
         public static readonly Guid ExpressShippingId = Guid.Parse("d8a9c347-6e5a-4b11-bf9d-2f4e9c1a7d55");
         public static readonly Guid UltraFastShippingId = Guid.Parse("c3b82e7d-1f92-4a50-a6b3-7d9e4f5c2a88");
-
     }
 }

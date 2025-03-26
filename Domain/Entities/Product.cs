@@ -24,8 +24,6 @@ namespace Domain.Entities
 
         [Required]
         public required DateTime UpdatedAt { get; set; }
-        public List<Comment>? Comments { get; set; }
-        public List<Rating>? Ratings { get; set; }
         public List<ProductImage>? ProductImages { get; set; }
     }
 }
