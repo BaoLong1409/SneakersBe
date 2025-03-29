@@ -214,5 +214,15 @@ namespace Sneakers.Services.UserService
             );
         }
 
+        public async Task<List<string>> GetUserRoles(User user)
+        {
+            if (user == null)
+            {
+                return new List<string>();
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.ToList();
+        }
+
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel.Product;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sneakers.Features.Queries.FeatureProducts;
 using Sneakers.Features.Queries.Products;
@@ -26,6 +28,21 @@ namespace Sneakers.Controllers
             _mediator = mediator;
             _colorService = colorService;
             _productService = productService;
+        }
+
+        [HttpPost]
+        [Route("product/uploadNewProduct")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UploadNewProduct([FromBody] UploadNewProductRequest request)
+        {
+            var status = await _productService.UploadNewProduct(request);
+            return status switch
+            {
+                EnumProduct.UploadProductSuccessfully => Ok(new {message = status.GetMessage()}),
+                EnumProduct.UploadProductFail => BadRequest(new { message = status.GetMessage()}),
+                EnumProduct.ProductExist => BadRequest(new { message = status.GetMessage()}),
+                _ => StatusCode(500, status.GetMessage())
+            };
         }
 
         [HttpGet]

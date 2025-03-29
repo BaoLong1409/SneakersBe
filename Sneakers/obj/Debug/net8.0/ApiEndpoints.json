@@ -89,6 +89,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Sneakers.Controllers.CategoryController",
+    "Method": "SearchCategory",
+    "RelativePath": "api/v1/category/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ColorController",
+    "Method": "GetAllColors",
+    "RelativePath": "api/v1/color/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Sneakers.Controllers.ColorController",
     "Method": "GetProductColors",
     "RelativePath": "api/v1/color/getProductColors",
@@ -363,6 +389,22 @@
         "Name": "keyword",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "UploadNewProduct",
+    "RelativePath": "api/v1/product/uploadNewProduct",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Domain.ViewModel.Product.UploadNewProductRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

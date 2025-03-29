@@ -38,9 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Command\" />
     <Folder Include="Features\Queries\Cart\" />
-    <Folder Include="Handler\CommandHandler\" />
   </ItemGroup>
 
 </Project>

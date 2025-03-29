@@ -20,5 +20,12 @@ namespace Sneakers.Controllers
         {
             return Ok(_categoryService.GetAllCategory());
         }
+
+        [HttpGet]
+        [Route("category/search")]
+        public async Task<IActionResult> SearchCategory(string query)
+        {
+            return Ok(await _categoryService.SearchCategory(query));
+        }
     }
 }

@@ -22,5 +22,11 @@ namespace Sneakers.Services.CategoryService
             var category = _unitOfWork.Category.GetAll();
             return _mapper.Map<IEnumerable<CategoryDto>>(category);
         }
+
+        public async Task<IEnumerable<CategoryDto>> SearchCategory (string query)
+        {
+            var category = await _unitOfWork.Category.FindAsync(c => c.Name.Contains(query));
+            return _mapper.Map<IEnumerable<CategoryDto>>(category);
+        }
     }
 }

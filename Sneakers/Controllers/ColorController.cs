@@ -16,6 +16,13 @@ namespace Sneakers.Controllers
         }
 
         [HttpGet]
+        [Route("color/getAll")]
+        public IActionResult GetAllColors()
+        {
+            return Ok(_colorService.GetAllColors());
+        }
+
+        [HttpGet]
         [Route("color/getProductColors")]
         public async Task<IActionResult> GetProductColors(Guid productId)
         {

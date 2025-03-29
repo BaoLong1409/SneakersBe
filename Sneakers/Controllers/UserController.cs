@@ -133,7 +133,7 @@ namespace Sneakers.Controllers
                 {
                     new Claim(ClaimTypes.Email, loginModel.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 };
 
                 foreach (var role in userRole)
@@ -306,7 +306,9 @@ namespace Sneakers.Controllers
         public async Task<IActionResult> GetInforUserByToken(string token)
         {
             var user = _unitOfWork.User.GetUserByToken(token);
+            List<string> userRoles = await _userService.GetUserRoles(user);
             var userInfor = _mapper.Map<UserDto>(user);
+            userInfor.RolesName = userRoles;
             return Ok(userInfor);
         }
 

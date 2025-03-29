@@ -24,5 +24,10 @@ namespace Sneakers.Services.ColorService
         {
             return await _unitOfWork.Color.GetFirstOrDefaultAsync(c => c.Name == colorName);
         }
+
+        public IEnumerable<Color>? GetAllColors()
+        {
+            return _unitOfWork.Color.GetAll();
+        }
     }
 }

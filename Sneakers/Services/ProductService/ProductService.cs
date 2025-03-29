@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel.Product;
 using MediatR;
+using Sneakers.Features.Command.Product;
 using Sneakers.Features.Queries.Products;
 using System.Diagnostics;
 
@@ -39,6 +41,11 @@ namespace Sneakers.Services.ProductService
         public async Task<IEnumerable<AllProductsDto>> GetAllProductsByCategory(GetProductsByCategoryReq req)
         {
             return await _mediator.Send(new GetAllProductsByCategory(req.CategoryName, req.BrandName));
+        }
+
+        public async Task<EnumProduct> UploadNewProduct(UploadNewProductRequest request)
+        {
+            return await _mediator.Send(new UploadNewProduct(request));
         }
     }
 }

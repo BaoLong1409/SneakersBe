@@ -34,6 +34,9 @@ using Sneakers.Services.OTPService;
 using Sneakers.Features.Queries.ProductReview;
 using Domain.ViewModel.ProductReview;
 using Sneakers.Handler.QueriesHandler.ProductReviewHandler;
+using Sneakers.Features.Command.Product;
+using Domain.Enum;
+using Sneakers.Handler.CommandHandler.ProductsHandler;
 
 
 namespace Sneakers.AddServicesCollection
@@ -86,6 +89,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<IRequestHandler<GetAllOrders, IEnumerable <AllOrdersDto>>, GetAllOrdersHandler>();
             services.AddScoped<IRequestHandler<GetProductsAreWaittingReview, IEnumerable<ProductsAreWaitingReviewDto>>, GetProductsAreWaitingReviewHandler>();
             services.AddScoped<IRequestHandler<GetCommentOfProduct, IEnumerable<ProductReviewDto>>, GetCommentOfProductHandler>();
+            services.AddScoped<IRequestHandler<UploadNewProduct, EnumProduct>, UploadNewProductHandler>();
 
             services.AddHttpContextAccessor();
         }
