@@ -8,8 +8,8 @@ namespace Domain.ViewModel.Category
 {
     public class CategoryDto
     {
-        public Guid Id { get; set; }
-        public required string Name { get; set; }
+        public Guid CategoryId { get; set; }
+        public required string CategoryName { get; set; }
         public required string Brand { get; set; }
 
     }

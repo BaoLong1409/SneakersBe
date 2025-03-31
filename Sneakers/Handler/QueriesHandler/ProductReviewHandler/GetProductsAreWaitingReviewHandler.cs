@@ -25,10 +25,10 @@ namespace Sneakers.Handler.QueriesHandler.ProductReviewHandler
                 od.Id,
                 od.Quantity,
                 od.PriceAtOrder,
-                c.Name AS ColorName,
+                c.ColorName,
                 s.SizeNumber,
                 osh.Status,
-                p.Name AS ProductName,
+                p.ProductName,
                 pi.ImageUrl
             FROM [Sneakers].[dbo].[OrderDetail] od
             JOIN [Sneakers].[dbo].[Order] o 

@@ -75,14 +75,14 @@ namespace DataAccess.DbContext
 
 
             builder.Entity<Payment>().HasData(
-                new Payment { Id = SeedData.SeedData.CODPaymentId, Name = "COD" },
-                new Payment { Id = SeedData.SeedData.VNPayPaymentId, Name = "VNPay" }
+                new Payment { Id = SeedData.SeedData.CODPaymentId, PaymentName = "COD" },
+                new Payment { Id = SeedData.SeedData.VNPayPaymentId, PaymentName = "VNPay" }
             );
 
             builder.Entity<Shipping>().HasData(
-                new Shipping { Id = SeedData.SeedData.StandardShippingId, Name = "Standard", Price = 0.61m, MinimumDeliveredTime = 5, MaximumDeliveredTime = 7 },
-                new Shipping { Id = SeedData.SeedData.ExpressShippingId, Name = "Express", Price = 0.90m, MinimumDeliveredTime = 3, MaximumDeliveredTime = 5 },
-                new Shipping { Id = SeedData.SeedData.UltraFastShippingId, Name = "Ultra-Fast Delivery", Price = 1.63m, MinimumDeliveredTime = -12, MaximumDeliveredTime = -24 }
+                new Shipping { Id = SeedData.SeedData.StandardShippingId, ShippingName = "Standard", Price = 0.61m, MinimumDeliveredTime = 5, MaximumDeliveredTime = 7 },
+                new Shipping { Id = SeedData.SeedData.ExpressShippingId, ShippingName = "Express", Price = 0.90m, MinimumDeliveredTime = 3, MaximumDeliveredTime = 5 },
+                new Shipping { Id = SeedData.SeedData.UltraFastShippingId, ShippingName = "Ultra-Fast Delivery", Price = 1.63m, MinimumDeliveredTime = -12, MaximumDeliveredTime = -24 }
             );
 
 

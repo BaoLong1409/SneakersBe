@@ -25,7 +25,7 @@ namespace Sneakers.Services.CategoryService
 
         public async Task<IEnumerable<CategoryDto>> SearchCategory (string query)
         {
-            var category = await _unitOfWork.Category.FindAsync(c => c.Name.Contains(query));
+            var category = await _unitOfWork.Category.FindAsync(c => c.CategoryName.Contains(query));
             return _mapper.Map<IEnumerable<CategoryDto>>(category);
         }
     }

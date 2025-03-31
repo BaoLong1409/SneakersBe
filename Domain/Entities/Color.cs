@@ -14,6 +14,6 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public required Guid Id { get; set; }
         [Required]
-        public required String Name { get; set; }
+        public required String ColorName { get; set; }
     }
 }

@@ -48,7 +48,7 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
                 INNER JOIN ProductImage i ON p.Id = i.ProductId 
                 WHERE inter.UserId IN (SELECT CAST(value AS UNIQUEIDENTIFIER) FROM STRING_SPLIT(@userIds, ',')) AND i.IsThumbnail = 1 
             ) 
-            SELECT DISTINCT rp.Id, rp.Name, rp.ThumbnailImage FROM RankedProducts rp WHERE RowNum <= (30 / (SELECT COUNT (DISTINCT inter.UserId) FROM Interaction inter WHERE UserId IN (SELECT CAST(value AS UNIQUEIDENTIFIER) FROM STRING_SPLIT(@userIds , ','))))";
+            SELECT DISTINCT rp.Id, rp.ProductName, rp.ThumbnailImage FROM RankedProducts rp WHERE RowNum <= (30 / (SELECT COUNT (DISTINCT inter.UserId) FROM Interaction inter WHERE UserId IN (SELECT CAST(value AS UNIQUEIDENTIFIER) FROM STRING_SPLIT(@userIds , ','))))";
 
             using (var connection = _context.CreateConnection())
             {

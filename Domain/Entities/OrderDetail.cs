@@ -24,8 +24,7 @@ namespace Domain.Entities
         [Required]
         public required Guid SizeId { get; set; }
         public Size? Size { get; set; }
-        [Required]
-        public required Guid ProductId { get; set; }
+        public Guid? ProductId { get; set; }
         public Product? Product { get; set; }
     }
 }

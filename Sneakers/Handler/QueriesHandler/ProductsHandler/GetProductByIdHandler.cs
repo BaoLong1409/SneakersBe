@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using DataAccess.DbContext;
 using Domain.Entities;
+using Domain.ViewModel.Category;
 using Domain.ViewModel.Product;
 using MediatR;
 using Sneakers.Features.Queries.Products;
@@ -16,29 +17,42 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
         }
         public async Task<DetailProductDto> Handle(GetProductById request, CancellationToken cancellationToken)
         {
-            var query = @"WITH ColorInfor AS
-                        (SELECT c.Id FROM Color c WHERE c.Name = @colorName)
-                        SELECT p.*, pi.Id, pi.ImageUrl, pi.IsThumbnail, pi.ProductId FROM Product p
-                        JOIN ProductImage pi ON p.Id = pi.ProductId
-                        JOIN ColorInfor cf ON cf.Id = pi.ColorId
-                        WHERE p.Id = @productId";
+            var query = @"SELECT DISTINCT p.Id AS ProductId, p.ProductName, p.Sale, p.Price, c.Id AS ColorId, c.ColorName, ct.Id AS CategoryId, ct.CategoryName, ct.Brand, pi.Id AS ProductImageId, pi.ImageUrl, pi.IsThumbnail
+	                    FROM Product p
+	                    JOIN ProductQuantity pq ON pq.ProductId = p.Id
+	                    JOIN Color c ON c.Id = pq.ColorId
+	                    JOIN ProductCategory pc ON pc.ProductId = p.Id
+	                    JOIN Category ct ON ct.Id = pc.CategoryId
+	                    JOIN ProductImage pi ON pi.ProductId = p.Id AND pi.ColorId = c.Id
+	                    WHERE p.Id = @ProductId AND c.ColorName = @ColorName";
             var productDic = new Dictionary<Guid, DetailProductDto>();
-            using (var connection = _context.CreateConnection()) {
-                 await connection.QueryAsync<DetailProductDto, ProductImageDto, DetailProductDto>(query, (product, image) =>
+            using (var connection = _context.CreateConnection())
+            {
+                await connection.QueryAsync<DetailProductDto, CategoryDto, ProductImageDto, DetailProductDto>(query, (product, category, image) =>
                 {
-                    if (!productDic.TryGetValue(product.Id, out var productEntry))
+                    if (!productDic.TryGetValue(product.ProductId, out var productEntry))
                     {
                         productEntry = product;
+                        productEntry.Categories = new List<CategoryDto>();
                         productEntry.ProductImages = new List<ProductImageDto>();
-                        productDic.Add(product.Id, productEntry);
+                        productDic.Add(product.ProductId, productEntry);
                     }
-                    productEntry.ProductImages.Add(image);
+
+                    if (!productEntry.Categories.Any(c => c.CategoryId == category.CategoryId))
+                    {
+                        productEntry.Categories.Add(category);
+                    }
+
+                    if (!productEntry.ProductImages.Any(img => img.ProductImageId == image.ProductImageId))
+                    {
+                        productEntry.ProductImages.Add(image);
+                    }
 
                     return productEntry;
                 },
-                param : new {productId = request.ProductId,colorName = request.ColorName },
-                splitOn: "Id"
-                );
+               param: new { ProductId = request.ProductId, ColorName = request.ColorName },
+               splitOn: "CategoryId,ProductImageId"
+               );
                 return productDic.Values.FirstOrDefault();
             }
         }

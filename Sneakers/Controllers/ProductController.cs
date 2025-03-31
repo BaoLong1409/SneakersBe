@@ -45,6 +45,34 @@ namespace Sneakers.Controllers
             };
         }
 
+        [HttpPost]
+        [Route("product/updateProduct")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductRequest request)
+        {
+            var status = await _productService.UpdateProduct(request);
+            return status switch
+            {
+                EnumProduct.UpdateProductSuccessfully => Ok(new { message = status.GetMessage() }),
+                EnumProduct.UpdateProductFail => BadRequest(new { message = status.GetMessage() }),
+                _ => StatusCode(500, status.GetMessage())
+            };
+        }
+
+        [HttpDelete]
+        [Route("product/deleteProduct")]
+        [Authorize (Roles = "Admin")]
+        public async Task<IActionResult> DeleteProduct(Guid productId)
+        {
+            var status = await _productService.DeleteProduct(productId);
+            return status switch
+            {
+                EnumProduct.DeleteProductSuccessfully => Ok(new { message = status.GetMessage() }),
+                EnumProduct.DeleteProductFail => BadRequest(new { message = status.GetMessage() }),
+                _ => StatusCode(500, status.GetMessage())
+            };
+        }
+
         [HttpGet]
         [Route("product/getAllFeatureProducts")]
         public async Task<IActionResult> GetFeatureProducts()

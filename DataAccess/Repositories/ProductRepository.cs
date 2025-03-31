@@ -34,7 +34,7 @@ namespace DataAccess.Repositories
                 })
                 .ToListAsync();
             foreach (var image in images) {
-                image.ColorName = colors.FirstOrDefault(c => c.Id == image.ColorId).Name;
+                image.ColorName = colors.FirstOrDefault(c => c.Id == image.ColorId).ColorName;
             }
 
             return images;

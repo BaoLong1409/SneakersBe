@@ -15,7 +15,7 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
         }
         public async Task<IEnumerable<AllProductsDto>> Handle(GetAllProductsByCategory request, CancellationToken cancellationToken)
         {
-            var query = @"SELECT DISTINCT p.Id, p.Name, p.Price, p.Sale, ct.Name AS CategoryName, ct.Brand, c.Id AS ColorId, c.Name AS ColorName, i.Id AS ImageId, i.ImageUrl AS ThumbnailUrl
+            var query = @"SELECT DISTINCT p.Id AS ProductId, p.ProductName, p.Price, p.Sale, ct.CategoryName, ct.Brand, c.Id AS ColorId, c.ColorName, i.Id AS ImageId, i.ImageUrl AS ThumbnailUrl
                         FROM Product p 
                         INNER JOIN ProductImage i ON p.Id = i.ProductId AND i.IsThumbnail = 1
                         INNER JOIN ProductQuantity pq ON pq.ProductId = p.Id AND pq.ColorId = i.ColorId
@@ -23,7 +23,7 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
                         INNER JOIN ProductCategory pt ON pt.ProductId = p.Id
                         INNER JOIN Category ct ON ct.id = pt.CategoryId
                         WHERE 
-                        (@CategoryName IS NULL OR ct.Name = @CategoryName) 
+                        (@CategoryName IS NULL OR ct.CategoryName = @CategoryName) 
                         AND (@BrandName IS NULL OR ct.Brand = @BrandName)
                         ORDER BY p.Id, c.Id";
             var productDic = new Dictionary<Guid, AllProductsDto>();
@@ -31,11 +31,11 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
             {
                 var allProducts = await connection.QueryAsync<AllProductsDto, AllProductsColorImageDto, AllProductsDto>(query, (product, colorAImage) =>
                 {
-                    if (!productDic.TryGetValue(product.Id, out var productEntry))
+                    if (!productDic.TryGetValue(product.ProductId, out var productEntry))
                     {
                         productEntry = product;
                         productEntry.ColorsAImages = new List<AllProductsColorImageDto>();
-                        productDic.Add(product.Id, productEntry);
+                        productDic.Add(product.ProductId, productEntry);
                     }
 
                     if (!productEntry.ColorsAImages.Any(c => c.ColorId == colorAImage.ColorId))

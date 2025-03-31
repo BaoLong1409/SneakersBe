@@ -15,7 +15,7 @@ namespace Sneakers.Handler.QueriesHandler.OrderHandler
         }
         public async Task<IEnumerable<OrderDetailDto>> Handle(GetOrderDetails request, CancellationToken cancellationToken)
         {
-            var query = @"SELECT od.ProductId, od.ColorId, od.SizeId, od.Quantity, od.OrderId, od.PriceAtOrder, p.Name AS ProductName, c.Name AS ColorName, s.SizeNumber, pi.ImageUrl
+            var query = @"SELECT od.ProductId, od.ColorId, od.SizeId, od.Quantity, od.OrderId, od.PriceAtOrder, p.ProductName, c.ColorName, s.SizeNumber, pi.ImageUrl
                         FROM OrderDetail od
                         JOIN Product p ON p.Id = od.ProductId
                         JOIN ProductImage pi ON pi.ProductId = od.ProductId AND pi.ColorId = od.ColorId AND pi.IsThumbnail = 1

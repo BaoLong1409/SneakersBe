@@ -22,7 +22,7 @@ namespace Sneakers.Services.ColorService
 
         public async Task<Color?> GetColorFromColorName(String colorName)
         {
-            return await _unitOfWork.Color.GetFirstOrDefaultAsync(c => c.Name == colorName);
+            return await _unitOfWork.Color.GetFirstOrDefaultAsync(c => c.ColorName == colorName);
         }
 
         public IEnumerable<Color>? GetAllColors()

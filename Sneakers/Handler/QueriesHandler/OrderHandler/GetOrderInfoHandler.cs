@@ -15,7 +15,7 @@ namespace Sneakers.Handler.QueriesHandler.OrderHandler
         }
         public async Task<OrderInfoDto> Handle(GetOrderInfo request, CancellationToken cancellationToken)
         {
-            var query = @"SELECT o.Id, o.OrderDate, o.ShippingDate, o.TotalMoney, o.FullName, o.PhoneNumber, o.ShippingAddress, s.MinimumDeliveredTime, s.MaximumDeliveredTime, s.Name AS ShippingName, s.Price AS ShippingPrice, p.Name AS PaymentName, osh.Id AS StatusId, osh.Status, osh.UpdatedAt, osh.Note AS StatusNote
+            var query = @"SELECT o.Id, o.OrderDate, o.ShippingDate, o.TotalMoney, o.FullName, o.PhoneNumber, o.ShippingAddress, s.MinimumDeliveredTime, s.MaximumDeliveredTime, s.ShippingName, s.Price AS ShippingPrice, p.PaymentName AS PaymentName, osh.Id AS StatusId, osh.Status, osh.UpdatedAt, osh.Note AS StatusNote
                             FROM [Sneakers].[dbo].[Order] o
                             JOIN Shipping s ON s.Id = o.ShippingId
                             JOIN Payment p ON p.Id = o.PaymentId

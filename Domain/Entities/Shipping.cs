@@ -14,7 +14,7 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Required]
-        public required string Name { get; set; }
+        public required string ShippingName { get; set; }
         [Required]
         public Decimal Price { get; set; }
         [Required]

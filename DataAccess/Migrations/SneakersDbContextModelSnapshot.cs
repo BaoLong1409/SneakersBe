@@ -53,7 +53,7 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -69,7 +69,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NewID()");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("ColorName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -209,7 +209,7 @@ namespace DataAccess.Migrations
                     b.Property<decimal>("PriceAtOrder")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
@@ -268,7 +268,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NewID()");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("PaymentName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -280,12 +280,12 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = new Guid("b3c1f7a4-92d5-4b19-a7e5-6d8b2a9f3d44"),
-                            Name = "COD"
+                            PaymentName = "COD"
                         },
                         new
                         {
                             Id = new Guid("f47e3b92-5c1d-4e06-9ea2-8b1d77f8c123"),
-                            Name = "VNPay"
+                            PaymentName = "VNPay"
                         });
                 });
 
@@ -299,12 +299,12 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Sale")
                         .HasColumnType("int");
@@ -555,12 +555,12 @@ namespace DataAccess.Migrations
                     b.Property<int>("MinimumDeliveredTime")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ShippingName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -572,24 +572,24 @@ namespace DataAccess.Migrations
                             Id = new Guid("7e2f4c38-8a5b-402a-b8d1-5e9fbc3d7a92"),
                             MaximumDeliveredTime = 7,
                             MinimumDeliveredTime = 5,
-                            Name = "Standard",
-                            Price = 0.61m
+                            Price = 0.61m,
+                            ShippingName = "Standard"
                         },
                         new
                         {
                             Id = new Guid("d8a9c347-6e5a-4b11-bf9d-2f4e9c1a7d55"),
                             MaximumDeliveredTime = 5,
                             MinimumDeliveredTime = 3,
-                            Name = "Express",
-                            Price = 0.90m
+                            Price = 0.90m,
+                            ShippingName = "Express"
                         },
                         new
                         {
                             Id = new Guid("c3b82e7d-1f92-4a50-a6b3-7d9e4f5c2a88"),
                             MaximumDeliveredTime = -24,
                             MinimumDeliveredTime = -12,
-                            Name = "Ultra-Fast Delivery",
-                            Price = 1.63m
+                            Price = 1.63m,
+                            ShippingName = "Ultra-Fast Delivery"
                         });
                 });
 
@@ -921,9 +921,7 @@ namespace DataAccess.Migrations
 
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("Domain.Entities.Size", "Size")
                         .WithMany()

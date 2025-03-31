@@ -22,18 +22,18 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
             const string query = @"
                 WITH RankedProducts AS (
                     SELECT 
-                        p.Id, p.Name, p.Price, p.Sale, 
-                        ct.Name AS CategoryName, ct.Brand,
-                        c.Id AS ColorId, c.Name AS ColorName, 
+                        p.Id AS ProductId, p.ProductName, p.Price, p.Sale, 
+                        ct.CategoryName, ct.Brand,
+                        c.Id AS ColorId, c.ColorName, 
                         i.Id AS ImageId, i.ImageUrl AS ThumbnailUrl,
-                        ROW_NUMBER() OVER (PARTITION BY p.Name ORDER BY p.Id, c.Id) AS rn
+                        ROW_NUMBER() OVER (PARTITION BY p.ProductName ORDER BY p.Id, c.Id) AS rn
                     FROM Product p 
                     INNER JOIN ProductImage i ON p.Id = i.ProductId AND i.IsThumbnail = 1
                     INNER JOIN ProductQuantity pq ON pq.ProductId = p.Id AND pq.ColorId = i.ColorId
                     INNER JOIN Color c ON c.Id = pq.ColorId
                     INNER JOIN ProductCategory pc ON pc.ProductId = p.Id
                     INNER JOIN Category ct ON ct.Id = pc.CategoryId
-                    WHERE p.Name LIKE @Keyword OR ct.Name LIKE @Keyword OR ct.Brand LIKE @Keyword
+                    WHERE p.ProductName LIKE @Keyword OR ct.CategoryName LIKE @Keyword OR ct.Brand LIKE @Keyword
                 )
                 SELECT * FROM RankedProducts WHERE rn = 1;
             ";
@@ -45,11 +45,11 @@ namespace Sneakers.Handler.QueriesHandler.ProductsHandler
                 query, 
                 (product, colorImage) =>
                 {
-                    if (!productDic.TryGetValue(product.Id, out var productEntry))
+                    if (!productDic.TryGetValue(product.ProductId, out var productEntry))
                     {
                         productEntry = product;
                         productEntry.ColorsAImages = new List<AllProductsColorImageDto>();
-                        productDic[product.Id] = productEntry;
+                        productDic[product.ProductId] = productEntry;
                     }
 
                     if (!productEntry.ColorsAImages.Any(c => c.ColorId != colorImage.ColorId))

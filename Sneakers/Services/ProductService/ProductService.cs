@@ -47,5 +47,15 @@ namespace Sneakers.Services.ProductService
         {
             return await _mediator.Send(new UploadNewProduct(request));
         }
+
+        public async Task<EnumProduct> UpdateProduct(UpdateProductRequest request)
+        {
+            return await _mediator.Send(new UpdateProduct(request));
+        }
+
+        public async Task<EnumProduct> DeleteProduct(Guid productId)
+        {
+            return await _mediator.Send(new DeleteProduct(productId));
+        }
     }
 }

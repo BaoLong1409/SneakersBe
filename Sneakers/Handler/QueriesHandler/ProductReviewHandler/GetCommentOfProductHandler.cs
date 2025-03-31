@@ -16,7 +16,7 @@ namespace Sneakers.Handler.QueriesHandler.ProductReviewHandler
         public async Task<IEnumerable<ProductReviewDto>> Handle(GetCommentOfProduct request, CancellationToken cancellationToken)
         {
             var query = @"SELECT pr.Id, pr.CommentContent, pr.Quality, pr.UpdatedAt, u.FirstName, u.LastName, pri.ImageUrl FROM [ProductReview] pr
-                            JOIN Color c ON c.Name = @ColorName
+                            JOIN Color c ON c.ColorName = @ColorName
                             JOIN OrderDetail od ON od.Id = pr.OrderDetailId AND od.Reviewed = 1 AND od.ColorId = c.Id
                             JOIN ProductReviewImage pri ON pri.ProductReviewId = pr.Id
                             JOIN Product p ON p.Id = od.ProductId

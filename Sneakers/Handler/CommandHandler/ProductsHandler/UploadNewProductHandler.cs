@@ -20,10 +20,10 @@ namespace Sneakers.Handler.CommandHandler.ProductsHandler
         }
         public async Task<EnumProduct> Handle(UploadNewProduct request, CancellationToken cancellationToken)
         {
-            var existProductQuery = @"SELECT p.Id FROM Product p JOIN ProductCategory pc ON pc.ProductId = p.Id JOIN Category c ON c.Brand = @Brand WHERE p.Name = @Name";
-            var existProductColorQuery = @"SELECT c.Id FROM Color c JOIN ProductImage pi ON pi.ColorId = c.Id JOIN Product p ON pi.ProductId = p.Id WHERE c.Name = @ColorName AND p.Id = @ProductId";
-            var uploadProductCommand = @"INSERT INTO Product (Name, CreatedAt, UpdatedAt, Price, Sale) OUTPUT INSERTED.Id VALUES  (@ProductName, GETDATE(), GETDATE(), @Price, @Sale)";
-            var categoryQuery = @"SELECT DISTINCT c.Id AS CategoryId FROM Category c WHERE c.Name IN @Name AND c.Brand = @Brand";
+            var existProductQuery = @"SELECT p.Id FROM Product p JOIN ProductCategory pc ON pc.ProductId = p.Id JOIN Category c ON c.Brand = @Brand WHERE p.ProductName = @ProductName";
+            var existProductColorQuery = @"SELECT c.Id FROM Color c JOIN ProductImage pi ON pi.ColorId = c.Id JOIN Product p ON pi.ProductId = p.Id WHERE c.ColorName = @ColorName AND p.Id = @ProductId";
+            var uploadProductCommand = @"INSERT INTO Product (ProductName, CreatedAt, UpdatedAt, Price, Sale) OUTPUT INSERTED.Id VALUES  (@ProductName, GETDATE(), GETDATE(), @Price, @Sale)";
+            var categoryQuery = @"SELECT DISTINCT c.Id AS CategoryId FROM Category c WHERE c.CategoryName IN @Name AND c.Brand = @Brand";
             var uploadProductCategoryQuery = @"INSERT INTO ProductCategory (ProductId, CategoryId) VALUES (@ProductId, @CategoryId)";
             var uploadProductImageCommand = @"INSERT INTO ProductImage (ImageUrl, IsThumbnail, ProductId, ColorId) VALUES (@ImageUrl, @IsThumbnail, @ProductId, @ColorId)";
             var uploadProductQuantityCommand = @"INSERT INTO ProductQuantity (SizeId, ProductId, ColorId, StockQuantity) VALUES (@SizeId, @ProductId, @ColorId, @StockQuantity)";
@@ -40,11 +40,11 @@ namespace Sneakers.Handler.CommandHandler.ProductsHandler
                         Cloudinary cloudinary = new Cloudinary(cloudinaryApi);
                         cloudinary.Api.Secure = true;
                         await cloudinary.CreateFolderAsync($"ProductImage/{request.Request.Brand}/{request.Request.ProductName}");
-                        await cloudinary.CreateFolderAsync($"ProductImage/{request.Request.Brand}/{request.Request.ProductName}/{request.Request.Color.Name}");
+                        await cloudinary.CreateFolderAsync($"ProductImage/{request.Request.Brand}/{request.Request.ProductName}/{request.Request.Color.ColorName}");
 
                         var productId = await connection.QueryFirstOrDefaultAsync<Guid>(existProductQuery, new
                         {
-                            Name = request.Request.ProductName,
+                            ProductName = request.Request.ProductName,
                             Brand = request.Request.Brand
                         }, transaction: transaction);
 
@@ -54,7 +54,7 @@ namespace Sneakers.Handler.CommandHandler.ProductsHandler
 
                             var existProductColorId = await connection.QueryFirstOrDefaultAsync<Guid>(existProductColorQuery, new
                             {
-                                ColorName = request.Request.Color.Name,
+                                ColorName = request.Request.Color.ColorName,
                                 ProductId = productId
                             }, transaction: transaction);
 
@@ -71,7 +71,7 @@ namespace Sneakers.Handler.CommandHandler.ProductsHandler
                                     var uploadParams = new ImageUploadParams()
                                     {
                                         File = new FileDescription(request.Request.ProductImages[i].FileName, stream),
-                                        AssetFolder = $"ProductImage/{request.Request.Brand}/{request.Request.ProductName}/{request.Request.Color.Name}"
+                                        AssetFolder = $"ProductImage/{request.Request.Brand}/{request.Request.ProductName}/{request.Request.Color.ColorName}"
                                     };
                                     var result = cloudinary.Upload(uploadParams);
 
@@ -129,7 +129,7 @@ namespace Sneakers.Handler.CommandHandler.ProductsHandler
                             var uploadParams = new ImageUploadParams()
                             {
                                 File = new FileDescription(request.Request.ProductImages[i].FileName, stream),
-                                AssetFolder = $"ProductImage/{request.Request.Brand}/{request.Request.ProductName}/{request.Request.Color.Name}"
+                                AssetFolder = $"ProductImage/{request.Request.Brand}/{request.Request.ProductName}/{request.Request.Color.ColorName}"
                             };
                             var result = cloudinary.Upload(uploadParams);
 

@@ -248,6 +248,22 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "DeleteProduct",
+    "RelativePath": "api/v1/product/deleteProduct",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
     "Method": "GetAllProducts",
     "RelativePath": "api/v1/product/getAll",
     "HttpMethod": "GET",
@@ -389,6 +405,22 @@
         "Name": "keyword",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.ProductController",
+    "Method": "UpdateProduct",
+    "RelativePath": "api/v1/product/updateProduct",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Domain.ViewModel.Product.UpdateProductRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -544,6 +576,27 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.SizeController",
+    "Method": "GetAvailableSizes",
+    "RelativePath": "api/v1/size/getAvailableSizes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "colorName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

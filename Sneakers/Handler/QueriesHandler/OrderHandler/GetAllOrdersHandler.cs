@@ -18,7 +18,7 @@ namespace Sneakers.Handler.QueriesHandler.OrderHandler
             var query = @"SELECT 
                             o.Id AS OrderId, 
                             o.TotalMoney, 
-                            p.Name AS FirstProductName, 
+                            p.ProductName AS FirstProductName, 
                             pi.ImageUrl, 
                             osh.Status AS OrderStatus
                             FROM [dbo].[Order] o

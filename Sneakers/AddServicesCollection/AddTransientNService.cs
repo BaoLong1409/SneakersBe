@@ -37,6 +37,8 @@ using Sneakers.Handler.QueriesHandler.ProductReviewHandler;
 using Sneakers.Features.Command.Product;
 using Domain.Enum;
 using Sneakers.Handler.CommandHandler.ProductsHandler;
+using Sneakers.Features.Queries.Size;
+using Sneakers.Handler.QueriesHandler.SizeHandler;
 
 
 namespace Sneakers.AddServicesCollection
@@ -90,6 +92,9 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<IRequestHandler<GetProductsAreWaittingReview, IEnumerable<ProductsAreWaitingReviewDto>>, GetProductsAreWaitingReviewHandler>();
             services.AddScoped<IRequestHandler<GetCommentOfProduct, IEnumerable<ProductReviewDto>>, GetCommentOfProductHandler>();
             services.AddScoped<IRequestHandler<UploadNewProduct, EnumProduct>, UploadNewProductHandler>();
+            services.AddScoped<IRequestHandler<UpdateProduct, EnumProduct>, UpdateProductHandler>();
+            services.AddScoped<IRequestHandler<DeleteProduct, EnumProduct>, DeleteProductHandler>();
+            services.AddScoped<IRequestHandler<GetAvailableSizes, IEnumerable<UploadSizeRequest>>, GetAvailableSizesHandler>();
 
             services.AddHttpContextAccessor();
         }

@@ -14,7 +14,7 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Required]
-        public required string Name { get; set; }
+        public required string ProductName { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         [Required] 

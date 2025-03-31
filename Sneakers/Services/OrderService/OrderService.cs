@@ -50,7 +50,7 @@ namespace Sneakers.Services.OrderService
                     if (orderRequest.Order.PaymentId.HasValue)
                     {
                         var payment = await _unitOfWork.Payment.GetByIdAsync(orderRequest.Order.PaymentId.Value);
-                        paymentName = payment?.Name;
+                        paymentName = payment?.PaymentName;
                     }
 
                     var order = _mapper.Map<Order>(orderRequest.Order);
@@ -120,7 +120,7 @@ namespace Sneakers.Services.OrderService
             UpdateOrderCodSuccess(orderUpdateReq.OrderId);
             var payMethod = await _unitOfWork.Payment.GetFirstOrDefaultAsync(x => x.Id == orderUpdateReq.PaymentId);
 
-            if (payMethod.Name == "COD" && payMethod != null)
+            if (payMethod.PaymentName == "COD" && payMethod != null)
             {
                 var updateQuantity = await UpdateProductQuantity(orderUpdateReq.OrderId);
                 if (!updateQuantity)

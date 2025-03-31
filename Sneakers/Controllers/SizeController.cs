@@ -25,5 +25,13 @@ namespace Sneakers.Controllers
             var sizes = _sizeService.GetAllSizes();
             return Ok(sizes);
         }
+
+        [HttpGet]
+        [Route("size/getAvailableSizes")]
+        public async Task<IActionResult> GetAvailableSizes(Guid productId, string colorName)
+        {
+            var sizes = await _sizeService.GetAvailableSizes(productId, colorName);
+            return Ok(sizes);
+        }
     }
 }
