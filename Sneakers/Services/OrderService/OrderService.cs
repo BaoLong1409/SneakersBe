@@ -98,9 +98,14 @@ namespace Sneakers.Services.OrderService
             }
         }
 
-        public async Task<IEnumerable<AllOrdersDto>> GetAllOrdersSv(Guid userId)
+        public async Task<IEnumerable<OrdersDto>> GetAllOrdersSv(Guid userId)
         {
-            return await _mediator.Send(new GetAllOrders(userId));
+            return await _mediator.Send(new GetOrders(userId, 0, 0, null));
+        }
+
+        public async Task<IEnumerable<OrdersDto>> GetOrdersByLimit(int offset, int limit, string status)
+        {
+            return await _mediator.Send(new GetOrders(null, offset, limit, status));
         }
 
         public async Task<Order?> GetOrderById(Guid orderId)
@@ -117,7 +122,7 @@ namespace Sneakers.Services.OrderService
         {
             var existingOrder = await _unitOfWork.Order.GetByIdAsync(orderUpdateReq.OrderId);
             if (existingOrder == null) return EnumOrder.OrderNotFound;
-            UpdateOrderCodSuccess(orderUpdateReq.OrderId);
+            UpdateOrderStatus(orderUpdateReq.OrderId, "Success", "Order Successfully");
             var payMethod = await _unitOfWork.Payment.GetFirstOrDefaultAsync(x => x.Id == orderUpdateReq.PaymentId);
 
             if (payMethod.PaymentName == "COD" && payMethod != null)
@@ -130,6 +135,24 @@ namespace Sneakers.Services.OrderService
             }
             _mapper.Map(orderUpdateReq, existingOrder);
             _unitOfWork.Complete();
+            return EnumOrder.UpdateOrderSuccess;
+        }
+
+        public async Task<EnumOrder> UpdateOrderStatus(UpdateOrderStatusRequest request)
+        {
+            var existingOrder = await _unitOfWork.Order.GetByIdAsync(request.OrderId);
+            if (existingOrder == null) return EnumOrder.OrderNotFound;
+            string statusNote = request.OrderStatus switch
+            {
+                "Pending" => "Waiting for user to select payment method",
+                "Success" => "Order Successfully",
+                "Delivering" => "Order has been delivering",
+                "Delivered" => "Order has been delivered successfully",
+                _ => "Unknown Order Status"
+            };
+
+            var updateStatus = UpdateOrderStatus(request.OrderId, request.OrderStatus, statusNote);
+            if (updateStatus == EnumOrder.OrderNotFound) return EnumOrder.OrderNotFound;
             return EnumOrder.UpdateOrderSuccess;
         }
 
@@ -162,12 +185,12 @@ namespace Sneakers.Services.OrderService
             return EnumOrder.AddOrderStatusSuccess;
         }
 
-        private EnumOrder UpdateOrderCodSuccess(Guid orderId)
+        private EnumOrder UpdateOrderStatus(Guid orderId, string status, string note)
         {
             var orderStatusDto = new OrderStatusHistoryDto
             {
-                Status = "Success",
-                StatusNote = "Order Successfully",
+                Status = status,
+                StatusNote = note,
                 UpdatedAt = DateTime.Now,
                 OrderId = orderId
             };

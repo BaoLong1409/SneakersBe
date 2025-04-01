@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Enum;
 using Domain.ViewModel.Order;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sneakers.Services.OrderService;
 using Sneakers.Services.VnpayService;
@@ -46,6 +47,14 @@ namespace Sneakers.Controllers
         }
 
         [HttpGet]
+        [Route("order/admin/getPage")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetPageOrders([FromQuery] int offset, [FromQuery] int limit, [FromQuery] string status)
+        {
+            return Ok(await _orderService.GetOrdersByLimit(offset, limit, status));
+        }
+
+        [HttpGet]
         [Route("order/getOrderInfo")]
         public async Task<IActionResult> GetOrderInfo(Guid orderId)
         {
@@ -73,6 +82,20 @@ namespace Sneakers.Controllers
             {
                 EnumOrder.UpdateOrderSuccess => Ok(new { status = EnumOrder.CreateOrderSuccess.ToString(), message = "Update Order Success" }),
                 EnumOrder.UpdateQuantityFail => BadRequest(new { status = EnumOrder.UpdateQuantityFail.ToString(), message = "Update Product Quantity Fail" }),
+                EnumOrder.OrderNotFound => BadRequest(new { status = EnumOrder.OrderNotFound.ToString(), message = "Order Not Found" }),
+                _ => StatusCode(500, new { message = "Unknown Error" })
+            };
+        }
+
+        [HttpPut]
+        [Route("order/updateStatus")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusRequest request)
+        {
+            var orderStatus = await _orderService.UpdateOrderStatus(request);
+            return orderStatus switch
+            {
+                EnumOrder.UpdateOrderSuccess => Ok(new { status = EnumOrder.CreateOrderSuccess.ToString(), message = "Update Order Success" }),
                 EnumOrder.OrderNotFound => BadRequest(new { status = EnumOrder.OrderNotFound.ToString(), message = "Order Not Found" }),
                 _ => StatusCode(500, new { message = "Unknown Error" })
             };
@@ -136,5 +159,6 @@ namespace Sneakers.Controllers
                 });
             }
         }
+
     }
 }

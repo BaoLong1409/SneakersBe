@@ -88,7 +88,7 @@ namespace Sneakers.AddServicesCollection
             services.AddScoped<IRequestHandler<GetRecommendProducts, IEnumerable<ShowProductsDto>>, GetRecommendProductsHandler>();
             services.AddScoped<IRequestHandler<GetProductById, DetailProductDto>, GetProductByIdHandler>();
             services.AddScoped<IRequestHandler<GetOrderInfo, OrderInfoDto>, GetOrderInfoHandler>();
-            services.AddScoped<IRequestHandler<GetAllOrders, IEnumerable <AllOrdersDto>>, GetAllOrdersHandler>();
+            services.AddScoped<IRequestHandler<GetOrders, IEnumerable <OrdersDto>>, GetOrdersHandler>();
             services.AddScoped<IRequestHandler<GetProductsAreWaittingReview, IEnumerable<ProductsAreWaitingReviewDto>>, GetProductsAreWaitingReviewHandler>();
             services.AddScoped<IRequestHandler<GetCommentOfProduct, IEnumerable<ProductReviewDto>>, GetCommentOfProductHandler>();
             services.AddScoped<IRequestHandler<UploadNewProduct, EnumProduct>, UploadNewProductHandler>();

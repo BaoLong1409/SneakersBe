@@ -6,18 +6,19 @@ using Sneakers.Features.Queries.Order;
 
 namespace Sneakers.Handler.QueriesHandler.OrderHandler
 {
-    public class GetAllOrdersHandler : IRequestHandler<GetAllOrders, IEnumerable<AllOrdersDto>>
+    public class GetOrdersHandler : IRequestHandler<GetOrders, IEnumerable<OrdersDto>>
     {
         private readonly SneakersDapperContext _context;
-        public GetAllOrdersHandler(SneakersDapperContext context)
+        public GetOrdersHandler(SneakersDapperContext context)
         {
             _context = context;
         }
-        public async Task<IEnumerable<AllOrdersDto>> Handle(GetAllOrders request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OrdersDto>> Handle(GetOrders request, CancellationToken cancellationToken)
         {
             var query = @"SELECT 
                             o.Id AS OrderId, 
                             o.TotalMoney, 
+                            o.OrderDate,
                             p.ProductName AS FirstProductName, 
                             pi.ImageUrl, 
                             osh.Status AS OrderStatus
@@ -33,19 +34,17 @@ namespace Sneakers.Handler.QueriesHandler.OrderHandler
                                 SELECT TOP 1 osh.*
                                 FROM OrderStatusHistory osh
                                 WHERE osh.OrderId = o.Id
-                                ORDER BY 
-                                    CASE 
-                                        WHEN osh.Status = 'Delivered' THEN 1
-                                        WHEN osh.Status = 'Delivering' THEN 2
-                                        WHEN osh.Status = 'Success' THEN 3
-                                        WHEN osh.Status = 'Pending' THEN 4
-                                        ELSE 5
-                                    END, 
-                                    osh.UpdatedAt DESC
-                                    ) osh
-                            WHERE o.UserId = @UserId;";
+                                ORDER BY osh.UpdatedAt DESC
+                                    ) osh";
+            if (request.UserId != null)
+            {
+                query += @" WHERE o.UserId = @UserId ORDER BY o.OrderDate";
+            } else
+            {
+                query += @" WHERE osh.Status = @Status ORDER BY o.OrderDate OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
+            }
             using (var connection = _context.CreateConnection()) {
-                var allOrders = connection.QueryAsync<AllOrdersDto>(query, new {UserId =  request.UserId}).Result;
+                var allOrders = connection.QueryAsync<OrdersDto>(query, new {UserId =  request.UserId, Offset = request.Offset, Limit = request.Limit, Status = request.Status}).Result;
                 return allOrders.ToList();
             }
         }

@@ -148,6 +148,32 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "GetPageOrders",
+    "RelativePath": "api/v1/order/admin/getPage",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "offset",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
     "Method": "GetAllOrdersContr",
     "RelativePath": "api/v1/order/getAll",
     "HttpMethod": "GET",
@@ -221,6 +247,22 @@
       {
         "Name": "order",
         "Type": "Domain.ViewModel.Order.OrderUpdateRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.OrderController",
+    "Method": "UpdateOrderStatus",
+    "RelativePath": "api/v1/order/updateStatus",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Domain.ViewModel.Order.UpdateOrderStatusRequest",
         "IsRequired": true
       }
     ],
