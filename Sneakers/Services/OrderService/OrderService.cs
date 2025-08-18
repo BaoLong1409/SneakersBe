@@ -160,7 +160,7 @@ namespace Sneakers.Services.OrderService
         {
             var orderStatusDto = new OrderStatusHistoryDto
             {
-                Status = "Paid",
+                Status = "Success",
                 StatusNote = "Pay Successfully",
                 UpdatedAt = DateTime.Now,
                 OrderId = orderId

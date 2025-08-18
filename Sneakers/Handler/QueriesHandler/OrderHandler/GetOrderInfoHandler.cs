@@ -20,7 +20,7 @@ namespace Sneakers.Handler.QueriesHandler.OrderHandler
                             JOIN Shipping s ON s.Id = o.ShippingId
                             JOIN Payment p ON p.Id = o.PaymentId
                             JOIN OrderStatusHistory osh ON osh.OrderId = o.Id
-                            WHERE o.Id = @OrderId";
+                            WHERE o.Id = @OrderId ORDER BY osh.UpdatedAt";
             var orderDic = new Dictionary<Guid, OrderInfoDto>();
             using (var connection = _context.CreateConnection())
             {

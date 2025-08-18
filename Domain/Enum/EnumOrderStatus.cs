@@ -9,7 +9,6 @@ namespace Domain.Enum
     public enum EnumOrderStatus
     {
         Pending,
-        Paid,
         Failed,
         Refunded,
         Processing,
