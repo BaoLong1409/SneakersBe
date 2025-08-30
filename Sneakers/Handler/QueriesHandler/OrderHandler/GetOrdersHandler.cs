@@ -23,7 +23,7 @@ namespace Sneakers.Handler.QueriesHandler.OrderHandler
                             pi.ImageUrl, 
                             osh.Status AS OrderStatus
                             FROM [dbo].[Order] o
-                            JOIN OrderDetail od ON od.OrderId = o.Id
+                            OUTER APPLY (SELECT TOP 1 od.ProductId, od.ColorId FROM OrderDetail od WHERE od.OrderId = o.Id) od
                             JOIN Product p ON p.Id = od.ProductId
                             OUTER APPLY (
                                 SELECT TOP 1 pi.ImageUrl 

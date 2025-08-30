@@ -79,5 +79,18 @@ namespace Sneakers.Controllers
                 _ => StatusCode(500, "Unknown Error")
             };
         }
+
+        [HttpDelete]
+        [Route("cart/deleteAllProducts")]
+        public async Task<IActionResult> DeleteAllProductsInCart(Guid userId)
+        {
+            var status = await _cartService.DeleteAllProductsInCart(userId);
+            return status switch
+            {
+                EnumProductCart.ProductNotFound => NotFound(new { status = EnumProductCart.ProductNotFound.ToString(), message = "Product Not Found" }),
+                EnumProductCart.Success => Ok(new { status = EnumProductCart.Success.ToString(), message = "Update Product Completely" }),
+                _ => StatusCode(500, "Unknown Error")
+            };
+        }
     }
 }

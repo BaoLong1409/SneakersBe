@@ -22,6 +22,22 @@
   },
   {
     "ContainingType": "Sneakers.Controllers.CartController",
+    "Method": "DeleteAllProductsInCart",
+    "RelativePath": "api/v1/cart/deleteAllProducts",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sneakers.Controllers.CartController",
     "Method": "DeleteProductInCart",
     "RelativePath": "api/v1/cart/deleteProduct",
     "HttpMethod": "DELETE",

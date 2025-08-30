@@ -165,12 +165,39 @@ namespace Sneakers.Services.CartService
             );
 
             if (existingProduct == null) {
+                cart.TotalProducts = 0;
                 return EnumProductCart.ProductNotFound;
             }
             cart.TotalProducts = cart.TotalProducts - 1;
             _unitOfWork.ProductCart.Remove(existingProduct);
             _unitOfWork.Complete();
 
+            return EnumProductCart.Success;
+        }
+
+        public async Task<EnumProductCart> DeleteAllProductsInCart(Guid userId)
+        {
+            var cart = await _unitOfWork.Cart.GetFirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null)
+            {
+                cart = CreateNewCart(new Cart
+                {
+                    TotalProducts = 1,
+                    UserId = userId
+                }, userId);
+            }
+            var allProductsInCart = await _unitOfWork.ProductCart.FindAsync(pc => pc.CartId == cart.Id);
+
+            if (allProductsInCart == null)
+            {
+                cart.TotalProducts = 0;
+                return EnumProductCart.ProductNotFound;
+            }
+
+            _unitOfWork.ProductCart.RemoveRange(allProductsInCart);
+            cart.TotalProducts = 0;
+            _unitOfWork.Complete();
             return EnumProductCart.Success;
         }
     }
