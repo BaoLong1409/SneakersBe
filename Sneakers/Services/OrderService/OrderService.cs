@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using DataAccess.DbContext;
 using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel.Order;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Sneakers.Features.Queries.Order;
 using Sneakers.Services.VnpayService;
 using System.Transactions;
@@ -15,35 +17,36 @@ namespace Sneakers.Services.OrderService
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IMediator mediator)
+        private readonly SneakersDbContext _context;
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IMediator mediator, SneakersDbContext context)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _mediator = mediator;
+            _context = context;
         }
 
         public async Task<(EnumOrder status, Guid? orderId)> AddOrder(CreateOrderRequest orderRequest)
         {
-            if (orderRequest.Order == null)
-            {
-                return (EnumOrder.CreateOrderFail, null);
-            }
+            var strategy = _context.Database.CreateExecutionStrategy();
 
-            if (orderRequest.OrderDetails == null)
+            if (orderRequest.Order == null || orderRequest.OrderDetails == null)
             {
                 return (EnumOrder.CreateOrderFail, null);
             }
 
             Decimal totalMoney = 0;
-            foreach(var orderDetail in orderRequest.OrderDetails)
+            foreach (var orderDetail in orderRequest.OrderDetails)
             {
-                totalMoney += (decimal) orderDetail.PriceAtOrder * orderDetail.Quantity;
+                totalMoney += (decimal)orderDetail.PriceAtOrder * orderDetail.Quantity;
             }
 
             orderRequest.Order.TotalMoney = totalMoney;
 
-            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            return await strategy.ExecuteAsync<(EnumOrder, Guid?)>(async () =>
             {
+                await using var transaction = await _context.Database.BeginTransactionAsync();
+
                 try
                 {
                     string paymentName = null;
@@ -86,16 +89,18 @@ namespace Sneakers.Services.OrderService
 
                     orderStatusHistory.OrderId = order.Id;
                     _unitOfWork.OrderStatusHistory.Add(orderStatusHistory);
+
                     _unitOfWork.Complete();
 
-                    transaction.Complete();
+                    await transaction.CommitAsync();
                     return (EnumOrder.CreateOrderSuccess, order.Id);
                 }
                 catch (Exception ex)
                 {
+                    await transaction.RollbackAsync();
                     return (EnumOrder.CreateOrderFail, null);
                 }
-            }
+            });
         }
 
         public async Task<IEnumerable<OrdersDto>> GetAllOrdersSv(Guid userId)
@@ -118,7 +123,7 @@ namespace Sneakers.Services.OrderService
             return await _mediator.Send(new GetOrderInfo(orderId));
         }
 
-        public async Task <EnumOrder> UpdateOrder(OrderUpdateRequest orderUpdateReq)
+        public async Task<EnumOrder> UpdateOrder(OrderUpdateRequest orderUpdateReq)
         {
             var existingOrder = await _unitOfWork.Order.GetByIdAsync(orderUpdateReq.OrderId);
             if (existingOrder == null) return EnumOrder.OrderNotFound;
@@ -219,10 +224,11 @@ namespace Sneakers.Services.OrderService
                 var productQuantity = await _unitOfWork.ProductQuantity.GetFirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.ColorId == item.ColorId && x.SizeId == item.SizeId);
                 if (productQuantity != null)
                 {
-                    if (productQuantity.StockQuantity - item.Quantity >=0)
+                    if (productQuantity.StockQuantity - item.Quantity >= 0)
                     {
                         productQuantity.StockQuantity -= item.Quantity;
-                    } else
+                    }
+                    else
                     {
                         return false;
                     }

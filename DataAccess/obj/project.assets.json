@@ -5898,11 +5898,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\DataAccess\\DataAccess.csproj",
+      "projectUniqueName": "D:\\Projects\\Sneakers\\Sneakers\\DataAccess\\DataAccess.csproj",
       "projectName": "DataAccess",
-      "projectPath": "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\DataAccess\\DataAccess.csproj",
+      "projectPath": "D:\\Projects\\Sneakers\\Sneakers\\DataAccess\\DataAccess.csproj",
       "packagesPath": "C:\\Users\\AD\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\DataAccess\\obj\\",
+      "outputPath": "D:\\Projects\\Sneakers\\Sneakers\\DataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\AD\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5920,8 +5920,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj"
+            "D:\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj": {
+              "projectPath": "D:\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj"
             }
           }
         }

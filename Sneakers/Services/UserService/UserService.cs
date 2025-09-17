@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Transactions;
 using System.ComponentModel.DataAnnotations;
+using DataAccess.DbContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sneakers.Services.UserService
 {
@@ -25,8 +27,10 @@ namespace Sneakers.Services.UserService
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Domain.Entities.Role> _roleManager;
+        private readonly SneakersDbContext _context;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, HttpClient httpClient, IConfiguration configuration, UserManager<User> userManager, RoleManager<Domain.Entities.Role> roleManager)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, HttpClient httpClient, IConfiguration configuration, UserManager<User> userManager, RoleManager<Domain.Entities.Role> roleManager, ILogger<UserService> logger, SneakersDbContext context)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -34,6 +38,8 @@ namespace Sneakers.Services.UserService
             _configuration = configuration;
             _userManager = userManager;
             _roleManager = roleManager;
+            _logger = logger;
+            _context = context;
         }
 
         public async Task<(EnumUser, UserDto?)> UpdateUserInformation(UpdateUserRequest userInfo)
@@ -76,72 +82,83 @@ namespace Sneakers.Services.UserService
 
         public async Task<(EnumUser, string?)> GoogleLogin(string googleToken)
         {
-            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            var strategy = _context.Database.CreateExecutionStrategy();
+
+            return await strategy.ExecuteAsync<(EnumUser, string?)>(async () =>
             {
-                GoogleJsonWebSignature.Payload payLoad = await GoogleJsonWebSignature.ValidateAsync(googleToken);
-                var user = await _userManager.FindByEmailAsync(payLoad.Email);
+                await using var transaction = await _context.Database.BeginTransactionAsync();
 
-                if (user == null)
+                try
                 {
-                    var userInfo = new
+                    GoogleJsonWebSignature.Payload payLoad = await GoogleJsonWebSignature.ValidateAsync(googleToken);
+                    var user = await _userManager.FindByEmailAsync(payLoad.Email);
+
+                    if (user == null)
                     {
-                        Id = Guid.NewGuid(),
-                        AvatarUrl = payLoad.Picture,
-                        UserName = payLoad.Email,
-                        FirstName = payLoad.GivenName,
-                        LastName = "",
-                        Email = payLoad.Email,
-                        EmailConfirmed = payLoad.EmailVerified ? 1 : 0
-                    };
+                        var userInfo = new
+                        {
+                            Id = Guid.NewGuid(),
+                            AvatarUrl = payLoad.Picture,
+                            UserName = payLoad.Email,
+                            FirstName = payLoad.GivenName,
+                            LastName = "",
+                            Email = payLoad.Email,
+                            EmailConfirmed = payLoad.EmailVerified ? 1 : 0
+                        };
 
 
-                    user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(userInfo));
-                    var createUserResult = await _userManager.CreateAsync(user);
-                    if (!createUserResult.Succeeded)
-                    {
-                        return (EnumUser.LoginFail, null);
+                        user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(userInfo));
+                        var createUserResult = await _userManager.CreateAsync(user);
+                        if (!createUserResult.Succeeded)
+                        {
+                            return (EnumUser.LoginFail, null);
+                        }
+                        await _userManager.AddToRoleAsync(user, "User");
                     }
-                    await _userManager.AddToRoleAsync(user, "User");
-                }
 
-                if (!await _roleManager.RoleExistsAsync("User"))
-                {
-                    var role = new Domain.Entities.Role { Name = "User" };
-                    var check = await _roleManager.CreateAsync(role);
-                    if (!check.Succeeded)
+                    if (!await _roleManager.RoleExistsAsync("User"))
                     {
-                        return (EnumUser.CreateRoleFail, null);
+                        var role = new Domain.Entities.Role { Name = "User" };
+                        var check = await _roleManager.CreateAsync(role);
+                        if (!check.Succeeded)
+                        {
+                            return (EnumUser.CreateRoleFail, null);
+                        }
                     }
-                }
 
-                if (!user.EmailConfirmed)
-                {
-                    return (EnumUser.NotConfirmed, null);
-                }
-                if (user != null)
-                {
-                    var userRoles = await _userManager.GetRolesAsync(user);
-                    var authClaims = new List<Claim>
+                    if (!user.EmailConfirmed)
+                    {
+                        return (EnumUser.NotConfirmed, null);
+                    }
+                    if (user != null)
+                    {
+                        var userRoles = await _userManager.GetRolesAsync(user);
+                        var authClaims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Email, payLoad.Email),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                     };
 
-                    foreach (var role in userRoles)
-                    {
-                        authClaims.Add(new Claim(ClaimTypes.Role, role));
+                        foreach (var role in userRoles)
+                        {
+                            authClaims.Add(new Claim(ClaimTypes.Role, role));
+                        }
+
+                        var token = GetToken(authClaims);
+                        var returnToken = new JwtSecurityTokenHandler().WriteToken(token);
+                        await transaction.CommitAsync();
+                        return (EnumUser.LoginSuccess, returnToken);
                     }
-
-                    var token = GetToken(authClaims);
-                    var returnToken = new JwtSecurityTokenHandler().WriteToken(token);
-                    transaction.Complete();
-                    return (EnumUser.LoginSuccess, returnToken);
+                    return (EnumUser.LoginFail, null);
                 }
-            }
-
-
-            return (EnumUser.LoginFail, null);
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Login fail: ");
+                    await transaction.RollbackAsync();
+                    return (EnumUser.LoginFail, null);
+                }
+            });
         }
 
         public async Task<EnumUser> ChangePassword(ChangePasswordRequest changePassReq, string token)
@@ -151,7 +168,8 @@ namespace Sneakers.Services.UserService
                 return EnumUser.DuplicatePassword;
             }
             var user = _unitOfWork.User.GetUserByToken(token);
-            if (user == null) {
+            if (user == null)
+            {
                 return EnumUser.TokenInvalid;
             }
 

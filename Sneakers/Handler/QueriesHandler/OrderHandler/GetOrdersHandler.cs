@@ -38,10 +38,10 @@ namespace Sneakers.Handler.QueriesHandler.OrderHandler
                                     ) osh";
             if (request.UserId != null)
             {
-                query += @" WHERE o.UserId = @UserId ORDER BY o.OrderDate";
+                query += @" WHERE o.UserId = @UserId ORDER BY o.OrderDate DESC";
             } else
             {
-                query += @" WHERE osh.Status = @Status ORDER BY o.OrderDate OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
+                query += @" WHERE osh.Status = @Status ORDER BY o.OrderDate DESC OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
             }
             using (var connection = _context.CreateConnection()) {
                 var allOrders = connection.QueryAsync<OrdersDto>(query, new {UserId =  request.UserId, Offset = request.Offset, Limit = request.Limit, Status = request.Status}).Result;

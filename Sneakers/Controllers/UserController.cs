@@ -30,7 +30,8 @@ namespace Sneakers.Controllers
         private readonly IEmailSender _emailSender;
         private readonly UserService _userService;
         private readonly OTPService _oTPService;
-        public UserController(IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, IEmailSender emailSender, UserService userService, OTPService otpService)
+        private readonly ILogger<UserController> _logger;
+        public UserController(IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, IEmailSender emailSender, UserService userService, OTPService otpService, ILogger<UserController> logger)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -40,14 +41,13 @@ namespace Sneakers.Controllers
             _emailSender = emailSender;
             _userService = userService;
             _oTPService = otpService;
+            _logger = logger;
         }
 
         [HttpPost]
         [Route("user/register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistration userModel)
         {
-            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
                 try
                 {
                     if (!ModelState.IsValid)
@@ -94,15 +94,14 @@ namespace Sneakers.Controllers
                          );
 
                     await _userManager.AddToRoleAsync(user, "User");
-                    transaction.Complete();
 
                     return Ok(new { message = "Register Successful" });
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex, "Register reason fail with email {Email}", userModel.Email);
                     return BadRequest(new { message = "Register fail" });
                 }
-            }
         }
 
         [HttpPost]
@@ -284,21 +283,21 @@ namespace Sneakers.Controllers
         {
             if (String.IsNullOrEmpty(token) || String.IsNullOrEmpty(email))
             {
-                return Redirect("http://localhost:4200/EmailConfirmed/invalid");
+                return Redirect("https://sneakers-7373f.web.app/EmailConfirmed/invalid");
             }
 
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                return Redirect("http://localhost:4200/EmailConfirmed/notFound");
+                return Redirect("https://sneakers-7373f.web.app/EmailConfirmed/notFound");
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                return Redirect("http://localhost:4200/EmailConfirmed/success");
+                return Redirect("https://sneakers-7373f.web.app/EmailConfirmed/success");
             }
-            return Redirect("http://localhost:4200/EmailConfirmed/fail");
+            return Redirect("https://sneakers-7373f.web.app/EmailConfirmed/fail");
         }
 
         [HttpGet]

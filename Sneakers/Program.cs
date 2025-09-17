@@ -22,7 +22,14 @@ builder.Services.ConfigureServices(builder.Configuration);
 
 builder.Services.AddDbContext<SneakersDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDb"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDb"), sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
 });
 
 builder.Services.AddAutoMapper(typeof(Program));

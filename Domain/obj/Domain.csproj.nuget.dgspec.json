@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj": {}
+    "D:\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj": {
+    "D:\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj",
+        "projectPath": "D:\\Projects\\Sneakers\\Sneakers\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\AD\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\AD\\OneDrive\\Desktop\\Projects\\Sneakers\\Sneakers\\Domain\\obj\\",
+        "outputPath": "D:\\Projects\\Sneakers\\Sneakers\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\AD\\AppData\\Roaming\\NuGet\\NuGet.Config",
