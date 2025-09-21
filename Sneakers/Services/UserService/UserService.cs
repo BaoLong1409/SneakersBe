@@ -16,6 +16,7 @@ using System.Transactions;
 using System.ComponentModel.DataAnnotations;
 using DataAccess.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNet.Identity;
 
 namespace Sneakers.Services.UserService
 {
@@ -70,6 +71,7 @@ namespace Sneakers.Services.UserService
                 return (EnumUser.NotExist, null);
             }
             _mapper.Map(userInfo, userExist);
+            List<string> userRoles = await GetUserRoles(userExist);
             if (avatarUrl != null)
             {
                 userExist.AvatarUrl = avatarUrl;
@@ -77,6 +79,7 @@ namespace Sneakers.Services.UserService
             _unitOfWork.Complete();
 
             var returnUserData = _mapper.Map<UserDto>(userExist);
+            returnUserData.RolesName = userRoles;
             return (EnumUser.UpdateSuccessfully, returnUserData);
         }
 

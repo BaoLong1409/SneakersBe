@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
 using Domain.ViewModel.User;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
