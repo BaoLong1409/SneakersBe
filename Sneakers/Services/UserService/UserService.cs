@@ -16,7 +16,6 @@ using System.Transactions;
 using System.ComponentModel.DataAnnotations;
 using DataAccess.DbContext;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNet.Identity;
 
 namespace Sneakers.Services.UserService
 {
