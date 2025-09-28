@@ -1,12 +1,6 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using DataAccess.SeedData;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.DbContext
 {
@@ -43,11 +37,12 @@ namespace DataAccess.DbContext
 
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
-                foreach (var property in entityType.GetProperties()) {
+                foreach (var property in entityType.GetProperties())
+                {
                     if (property.ClrType == typeof(Guid) && property.IsPrimaryKey())
                     {
                         property.SetDefaultValueSql("NewID()");
-                    } 
+                    }
                 }
             }
 
